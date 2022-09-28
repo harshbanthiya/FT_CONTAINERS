@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/Users/hbanthiy/FT_CONTAINERS/build",
+  "command": "/usr/bin/clang++   -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15 -fPIC -o CMakeFiles/Example.dir/main.cpp.o -c /Users/hbanthiy/FT_CONTAINERS/main.cpp",
+  "file": "/Users/hbanthiy/FT_CONTAINERS/main.cpp"
+},
+{
+  "directory": "/Users/hbanthiy/FT_CONTAINERS/build/googletest/googlemock",
+  "command": "/usr/bin/clang++  -I/Users/hbanthiy/FT_CONTAINERS/googletest/googlemock/include -I/Users/hbanthiy/FT_CONTAINERS/googletest/googlemock -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googletest/include -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googletest -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15 -fPIC  -DGTEST_HAS_PTHREAD=1   -std=c++14 -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /Users/hbanthiy/FT_CONTAINERS/googletest/googlemock/src/gmock-all.cc",
+  "file": "/Users/hbanthiy/FT_CONTAINERS/googletest/googlemock/src/gmock-all.cc"
+},
+{
+  "directory": "/Users/hbanthiy/FT_CONTAINERS/build/googletest/googlemock",
+  "command": "/usr/bin/clang++  -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googlemock/include -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googlemock -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googletest/include -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googletest -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15 -fPIC  -DGTEST_HAS_PTHREAD=1   -std=c++14 -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /Users/hbanthiy/FT_CONTAINERS/googletest/googlemock/src/gmock_main.cc",
+  "file": "/Users/hbanthiy/FT_CONTAINERS/googletest/googlemock/src/gmock_main.cc"
+},
+{
+  "directory": "/Users/hbanthiy/FT_CONTAINERS/build/googletest/googletest",
+  "command": "/usr/bin/clang++  -I/Users/hbanthiy/FT_CONTAINERS/googletest/googletest/include -I/Users/hbanthiy/FT_CONTAINERS/googletest/googletest -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15 -fPIC  -DGTEST_HAS_PTHREAD=1   -std=c++14 -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /Users/hbanthiy/FT_CONTAINERS/googletest/googletest/src/gtest-all.cc",
+  "file": "/Users/hbanthiy/FT_CONTAINERS/googletest/googletest/src/gtest-all.cc"
+},
+{
+  "directory": "/Users/hbanthiy/FT_CONTAINERS/build/googletest/googletest",
+  "command": "/usr/bin/clang++  -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googletest/include -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googletest -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15 -fPIC  -DGTEST_HAS_PTHREAD=1   -std=c++14 -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /Users/hbanthiy/FT_CONTAINERS/googletest/googletest/src/gtest_main.cc",
+  "file": "/Users/hbanthiy/FT_CONTAINERS/googletest/googletest/src/gtest_main.cc"
+},
+{
+  "directory": "/Users/hbanthiy/FT_CONTAINERS/build/tests",
+  "command": "/usr/bin/clang++  -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googletest/include -isystem /Users/hbanthiy/FT_CONTAINERS/googletest/googletest -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15 -fPIE -std=gnu++14 -o CMakeFiles/ExampleTests.dir/exampletest.cpp.o -c /Users/hbanthiy/FT_CONTAINERS/tests/exampletest.cpp",
+  "file": "/Users/hbanthiy/FT_CONTAINERS/tests/exampletest.cpp"
+}
+]
