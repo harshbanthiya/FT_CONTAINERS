@@ -6,13 +6,14 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 12:10:54 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/09/29 12:32:08 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/09/29 13:08:58 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LLIST_HPP
 #define LLIST_HPP
 #include <iostream>
+
 class LNode
 {
     public: 
@@ -59,11 +60,23 @@ class LNode
 class LList
 {
     public:
-        LList();
+        LList()
+        {
+            begin = nullptr;
+        };
         ~LList();
+        void insert(int it)
+        {
+            
+        }
+        int find()
+        {
+            
+        }
 
     private: 
-        
+        LNode *begin;
+
 }; 
 
 
