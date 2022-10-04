@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 12:10:54 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/09/29 13:08:58 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/09/29 13:42:25 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ class LList
         void insert(int it)
         {
             
-        }
+        };
         int find()
         {
             
-        }
+        };
 
     private: 
         LNode *begin;
