@@ -1,30 +1,30 @@
 #include <iostream>
 #include "catch.hpp"
-#include "../LList.hpp"
+#include "../Ft_vector/ft_vector.hpp"
 #include <string>
 
-TEST_CASE("L Node", "[NODE]")
+TEST_CASE("FT_VECTOR", "[VECTOR]")
 {   
-    SECTION("Initialize")
+    SECTION("Default copy constructor or your implementation is making a shallow copy")
     {
-        LNode *node = new LNode(1, nullptr);
-        REQUIRE(node->getData() == 1);
-        REQUIRE(node->getNext() == nullptr);
+        ft::Vector<int> x (100);
+        ft::Vector<int> y(x);
+        ft::Vector<int> z(200);
+    
+       z = x;
+       // REQUIRE(node->getNext() == nullptr);
     }
-    SECTION("TEST MULTIPLE NODES ON THE LINK LIST")
+    SECTION("TESTING DEEP COPY AND SIMPLE PUSHBACK POP_BACK")
     {
-        LNode *begin = new LNode(1, nullptr);
-        begin->setNext(new LNode(2, nullptr));
-        begin->getNext()->setNext(new LNode(3, nullptr));
+        ft::Vector<int> xx(100);
+        ft::Vector<int> xy(100);
 
-        REQUIRE(begin->getData() == 1);
-        REQUIRE(begin->getNext() != nullptr);
+        xx.push_back(400);
+        xy.push_back(400);
+        xx.pop_back();
+        xy.pop_back();
 
-        REQUIRE(begin->getNext()->getData() == 2);
-        REQUIRE(begin->getNext()->getNext() != nullptr);
-
-        REQUIRE(begin->getNext()->getNext()->getData() == 3);
-        REQUIRE(begin->getNext()->getNext()->getNext() == nullptr);
+        
     }
 }
 

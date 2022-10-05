@@ -6,7 +6,7 @@
 #    By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/28 10:52:34 by hbanthiy          #+#    #+#              #
-#    Updated: 2022/09/29 12:08:06 by hbanthiy         ###   ########.fr        #
+#    Updated: 2022/10/05 12:44:22 by hbanthiy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME 		:= ft_containers
 CPP	 		:=	c++
 CPPFLAGS 	:=  -Wall -Werror -Wextra -std=c++98
 
-SRCS 		:= main.cpp
+SRCS 		:= _main.cpp
 OBJS_DIR 	:= object_files
 OBJS		:= $(addprefix $(OBJS_DIR)/, $(SRCS:.cpp=.o))
 
