@@ -12,7 +12,6 @@ int main()
     x.pop_back();
     z.pop_back();
 
-    std::cout << &x << " " << &z << std::endl;
    // std::cout << x.buffer[0];
     //std::cout << z.buffer[0];
     //z = x;

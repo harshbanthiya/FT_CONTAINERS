@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/05 14:20:26 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/05 15:03:25 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ namespace ft
         T*              buffer;
 
         public:
-        Vector(int capacity) : _capacity(capacity = 100), _length(0), buffer(static_cast <T *>(::operator new(sizeof(T)))){ std::cout << "Vec constructor called\n";};
+        Vector(int capacity = 10) : _capacity(capacity), _length(0), buffer(static_cast <T *>(::operator new(sizeof(T) * _capacity))){ std::cout << "Vec constructor called\n";};
         ~Vector()
         {   
             for(std::size_t loop = 0; loop < _length; ++loop)
@@ -33,21 +33,37 @@ namespace ft
             ::operator delete(buffer);
         };
         
-        Vector(Vector const& rhs) : _capacity(rhs._capacity), _length(rhs._length), buffer(static_cast<T *>(::operator new(sizeof(T))))
+        Vector(Vector const& rhs) : _capacity(rhs._capacity), _length(rhs._length), buffer(static_cast<T *>(::operator new(sizeof(T) * rhs._capacity)))
         {
-            for (std::size_t loop = 0; loop < rhs._length; ++loop)
+            try
             {
-                push_back(rhs.buffer[loop]);
+                for (std::size_t loop = 0; loop < rhs._length; ++loop)
+                    push_back(rhs.buffer[loop]);
+            }
+            catch(const std::exception& ex)
+            {
+                ::operator delete(buffer);
+                for(std::size_t loop = 0; loop < _length; ++loop)
+                    buffer[_length - 1 - loop].~T();
+                throw(ex.what());
             }
         };
+        
         Vector& operator=(Vector const &rhs)
         {   
                 (void )rhs;
                 return *this;
         }
-
+        void swap(Vector& other)
+        {
+            std::swap(_capacity, other._capacity);
+            std::swap(_length, other._length);
+            std::swap(buffer, other.buffer);
+        }
+        
         void push_back(T const &value)
         {
+            resize_if_req();
             new (buffer + _length) T (value);
             ++_length;
             // handle growing the capacity later 
@@ -59,6 +75,14 @@ namespace ft
             --_length;
             buffer[_length].~T();
         }
+        private:
+            void resize_if_req()
+            {
+                if (_length == _capacity)
+                {
+                    
+                }
+            }
     };    
         
 } // namespace ft   
