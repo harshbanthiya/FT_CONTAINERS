@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/06 14:53:40 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/06 15:12:20 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,17 @@ namespace ft
                 throw(ex.what());
             }
     }
+    // To get the strong exception guarantee, I need to dump in a intermediate buffer, a copy swap 
     template <typename T>
     Vector<T>& Vector<T>::operator=(Vector<T> const &rhs)
     {   
         if (&rhs == this)
             return (*this);
+        // Create Copy 
+        std::size_t tmpCap = rhs._length;
+        std::size_t tmpSize = 0;
+        T*          tmpBuffer = static_cast<T*>(::operator new(sizeof(T) * tmpCap));
+        
         for (std::size_t loop = 0; loop < _length; ++loop)
         {
             //Destroy in reverse 
@@ -66,6 +72,7 @@ namespace ft
         }
         return (*this);
     }
+    
     template<typename T>
     void Vector<T>::swap(Vector& other)
     {
