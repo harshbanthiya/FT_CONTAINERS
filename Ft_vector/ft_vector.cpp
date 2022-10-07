@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/07 12:50:44 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/07 14:29:38 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,15 @@ namespace ft
         std::cout << "Vec constructor called\n";    
     }
     
+    template<typename T>
+    template<typename I>
+    Vector<T>::Vector(I begin, I end) : _capacity(std::distance(begin, end)), _length(0), buffer(static_cast <T *>(::operator new(sizeof(T) * _capacity)))
+    { 
+        for (I loop = begin; loop != end; ++loop)
+            pushBackInternal(*loop);
+        std::cout << "Vec I constructor called\n";    
+    }
+
     template<typename T>
     Vector<T>::~Vector()
     {
@@ -127,7 +136,6 @@ namespace ft
             buffer[_length].~T();
     }
 
-}
-
+} // namespace 
 
 #endif
