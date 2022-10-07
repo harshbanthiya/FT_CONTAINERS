@@ -1,6 +1,6 @@
 #include <iostream>
 #include "catch.hpp"
-#include "../Ft_vector/ft_vector.hpp"
+#include "../ft_vector.hpp"
 #include <string>
 #include <vector>
 
@@ -8,11 +8,11 @@ TEST_CASE("FT_VECTOR_CONSTRUCTOR TEST", "[VECTOR]")
 {   
     SECTION("Default copy constructor or your implementation is making a shallow copy")
     {
-        ft::Vector<int> x;
+        ft::vector<int> x;
         x.push_back(100);
-        ft::Vector<int> y;
+        ft::vector<int> y;
         y = x;
-        ft::Vector<int> z;
+        ft::vector<int> z;
         z.push_back(200);
 
         std::vector<int> xv;

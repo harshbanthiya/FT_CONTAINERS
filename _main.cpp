@@ -1,11 +1,11 @@
-#include "Ft_vector/ft_vector.hpp"
+#include "ft_vector.hpp"
 #include <iostream>
 
 int main()
 {
-    ft::Vector<int> x(100);
-   // ft::Vector<int> y(x);
-    ft::Vector<int> z(200);
+    ft::vector<int> x(100);
+   // ft::vector<int> y(x);
+    ft::vector<int> z(200);
     x.push_back(200);
     z.push_back(100);
 

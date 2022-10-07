@@ -6,13 +6,13 @@
 #    By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/28 10:52:34 by hbanthiy          #+#    #+#              #
-#    Updated: 2022/10/07 15:36:34 by hbanthiy         ###   ########.fr        #
+#    Updated: 2022/10/07 16:42:06 by hbanthiy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 		:= ft_containers
 CPP	 		:=	c++
-CPPFLAGS 	:=  -Wall -Werror -Wextra -std=c++98
+CPPFLAGS 	:=  -Wall -Werror -Wextra -std=c++11
 
 SRCS 		:= _main.cpp ft_vector.cpp
 OBJS_DIR 	:= object_files
@@ -21,7 +21,7 @@ OBJS		:= $(addprefix $(OBJS_DIR)/, $(SRCS:.cpp=.o))
 TESTEXE 	:= test_containers
 TESTCOMPLILER := g++
 TESTFLAGS 	  := -std=c++11 
-TESTSRCS 	  := main.cpp tests/vectorTests.cpp Ft_vector/ft_vector.cpp
+TESTSRCS 	  := main.cpp tests/vectorTests.cpp ft_vector.cpp
 
 
 all: $(NAME)

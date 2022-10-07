@@ -3602,7 +3602,7 @@ namespace Matchers {
 namespace Catch {
 namespace Matchers {
 
-    namespace Vector {
+    namespace vector {
         template<typename T, typename Alloc>
         struct ContainsElementMatcher : MatcherBase<std::vector<T, Alloc>> {
 
@@ -3730,34 +3730,34 @@ namespace Matchers {
             std::vector<T, AllocComp> const& m_target;
         };
 
-    } // namespace Vector
+    } // namespace vector
 
     // The following functions create the actual matcher objects.
     // This allows the types to be inferred
 
     template<typename T, typename AllocComp = std::allocator<T>, typename AllocMatch = AllocComp>
-    Vector::ContainsMatcher<T, AllocComp, AllocMatch> Contains( std::vector<T, AllocComp> const& comparator ) {
-        return Vector::ContainsMatcher<T, AllocComp, AllocMatch>( comparator );
+    vector::ContainsMatcher<T, AllocComp, AllocMatch> Contains( std::vector<T, AllocComp> const& comparator ) {
+        return vector::ContainsMatcher<T, AllocComp, AllocMatch>( comparator );
     }
 
     template<typename T, typename Alloc = std::allocator<T>>
-    Vector::ContainsElementMatcher<T, Alloc> VectorContains( T const& comparator ) {
-        return Vector::ContainsElementMatcher<T, Alloc>( comparator );
+    vector::ContainsElementMatcher<T, Alloc> vectorContains( T const& comparator ) {
+        return vector::ContainsElementMatcher<T, Alloc>( comparator );
     }
 
     template<typename T, typename AllocComp = std::allocator<T>, typename AllocMatch = AllocComp>
-    Vector::EqualsMatcher<T, AllocComp, AllocMatch> Equals( std::vector<T, AllocComp> const& comparator ) {
-        return Vector::EqualsMatcher<T, AllocComp, AllocMatch>( comparator );
+    vector::EqualsMatcher<T, AllocComp, AllocMatch> Equals( std::vector<T, AllocComp> const& comparator ) {
+        return vector::EqualsMatcher<T, AllocComp, AllocMatch>( comparator );
     }
 
     template<typename T, typename AllocComp = std::allocator<T>, typename AllocMatch = AllocComp>
-    Vector::ApproxMatcher<T, AllocComp, AllocMatch> Approx( std::vector<T, AllocComp> const& comparator ) {
-        return Vector::ApproxMatcher<T, AllocComp, AllocMatch>( comparator );
+    vector::ApproxMatcher<T, AllocComp, AllocMatch> Approx( std::vector<T, AllocComp> const& comparator ) {
+        return vector::ApproxMatcher<T, AllocComp, AllocMatch>( comparator );
     }
 
     template<typename T, typename AllocComp = std::allocator<T>, typename AllocMatch = AllocComp>
-    Vector::UnorderedEqualsMatcher<T, AllocComp, AllocMatch> UnorderedEquals(std::vector<T, AllocComp> const& target) {
-        return Vector::UnorderedEqualsMatcher<T, AllocComp, AllocMatch>( target );
+    vector::UnorderedEqualsMatcher<T, AllocComp, AllocMatch> UnorderedEquals(std::vector<T, AllocComp> const& target) {
+        return vector::UnorderedEqualsMatcher<T, AllocComp, AllocMatch>( target );
     }
 
 } // namespace Matchers
@@ -10807,7 +10807,7 @@ namespace Catch {
         { static_cast<DWORD>(EXCEPTION_INT_DIVIDE_BY_ZERO), "Divide by zero error" },
     };
 
-    static LONG CALLBACK handleVectoredException(PEXCEPTION_POINTERS ExceptionInfo) {
+    static LONG CALLBACK handlevectoredException(PEXCEPTION_POINTERS ExceptionInfo) {
         for (auto const& def : signalDefs) {
             if (ExceptionInfo->ExceptionRecord->ExceptionCode == def.id) {
                 reportFatal(def.name);
@@ -10842,14 +10842,14 @@ namespace Catch {
 
     void FatalConditionHandler::engage_platform() {
         // Register as first handler in current chain
-        exceptionHandlerHandle = AddVectoredExceptionHandler(1, handleVectoredException);
+        exceptionHandlerHandle = AddvectoredExceptionHandler(1, handlevectoredException);
         if (!exceptionHandlerHandle) {
             CATCH_RUNTIME_ERROR("Could not register vectored exception handler");
         }
     }
 
     void FatalConditionHandler::disengage_platform() {
-        if (!RemoveVectoredExceptionHandler(exceptionHandlerHandle)) {
+        if (!RemovevectoredExceptionHandler(exceptionHandlerHandle)) {
             CATCH_RUNTIME_ERROR("Could not unregister vectored exception handler");
         }
         exceptionHandlerHandle = nullptr;
