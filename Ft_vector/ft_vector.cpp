@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/07 14:29:38 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/07 15:48:59 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ namespace ft
     }
     
     template<typename T>
-    Vector<T>::Vector(Vector const& rhs) : _capacity(rhs._capacity), _length(rhs._length), buffer(static_cast<T *>(::operator new(sizeof(T) * rhs._capacity)))
+    Vector<T>::Vector(Vector<T> const& rhs) : _capacity(rhs._capacity), _length(0), buffer(static_cast<T *>(::operator new(sizeof(T) * _capacity)))
     {
             try
             {

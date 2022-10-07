@@ -6,7 +6,7 @@
 #    By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/28 10:52:34 by hbanthiy          #+#    #+#              #
-#    Updated: 2022/10/06 11:47:48 by hbanthiy         ###   ########.fr        #
+#    Updated: 2022/10/07 15:36:34 by hbanthiy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ OBJS		:= $(addprefix $(OBJS_DIR)/, $(SRCS:.cpp=.o))
 TESTEXE 	:= test_containers
 TESTCOMPLILER := g++
 TESTFLAGS 	  := -std=c++11 
-TESTSRCS 	  := main.cpp tests/exampletest.cpp Ft_vector/ft_vector.cpp
+TESTSRCS 	  := main.cpp tests/vectorTests.cpp Ft_vector/ft_vector.cpp
 
 
 all: $(NAME)
