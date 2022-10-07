@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/07 12:45:19 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/07 12:50:44 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ namespace ft
             buffer[_length - 1 - loop].~T(); // Destroy elements in reverse order 
         }
         ::operator delete(buffer);
+        std::cout << "Vec Destructor called\n";    
     }
     
     template<typename T>
@@ -58,7 +59,7 @@ namespace ft
         if (&rhs == this)
             return (*this);
 
-        // Create copy is function scope, frees itself automatically 
+        // Create tmp stack vector in function scope, frees itself automatically 
         // at closing brace of this function 
         Vector tmp(rhs);
         
