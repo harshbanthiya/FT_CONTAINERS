@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/07 16:39:29 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/11 12:21:23 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,14 @@
 #include "ft_vector.hpp"
 namespace ft
 {   
-    template<typename T>
-    vector<T>::vector(int capacity) : _capacity(capacity), _length(0), buffer(static_cast <T *>(::operator new(sizeof(T) * _capacity)))
-    { 
-        std::cout << "Vec constructor called\n";    
-    }
-    
-    template<typename T>
-    template<typename I>
-    vector<T>::vector(I begin, I end) : _capacity(std::distance(begin, end)), _length(0), buffer(static_cast <T *>(::operator new(sizeof(T) * _capacity)))
-    { 
-        for (I loop = begin; loop != end; ++loop)
-            pushBackInternal(*loop);
-        std::cout << "Vec I constructor called\n";    
+    template<typename T, typename Allocator>
+    vector<T, Allocator>::vector(const allocator_type& alloc)
+    {
+        
     }
 
-    template<typename T>
-    vector<T>::~vector()
+    template<typename T, typename Allocator>
+    vector<T, Allocator>::~vector()
     {
         for(std::size_t loop = 0; loop < _length; ++loop)
         {
@@ -42,8 +33,8 @@ namespace ft
         std::cout << "Vec Destructor called\n";    
     }
     
-    template<typename T>
-    vector<T>::vector(vector<T> const& rhs) : _capacity(rhs._capacity), _length(0), buffer(static_cast<T *>(::operator new(sizeof(T) * _capacity)))
+    template<typename T, typename Allocator>
+    vector<T, Allocator>::vector(vector<T, Allocator> const& rhs) : _capacity(rhs._capacity), _length(0), buffer(static_cast<T *>(::operator new(sizeof(T) * _capacity)))
     {
             try
             {
@@ -62,8 +53,8 @@ namespace ft
     // To get the strong exception guarantee, I need to dump in a intermediate buffer
     // essentially creating a copy swap operation. 
      
-    template <typename T>
-    vector<T>& vector<T>::operator=(vector<T> const &rhs)
+    template <typename T, typename Allocator>
+    vector<T, Allocator>& vector<T, Allocator>::operator=(vector<T, Allocator> const &rhs)
     {   
         if (&rhs == this)
             return (*this);
@@ -78,16 +69,16 @@ namespace ft
         return (*this);
     }
     
-    template<typename T>
-    void vector<T>::reserve(std::size_t capacityUpperBound)
+    template<typename T, typename Allocator>
+    void vector<T, Allocator>::reserve(std::size_t capacityUpperBound)
     {
         if (capacityUpperBound > _capacity)
             reserveCapacity(capacityUpperBound);
     }
     
 
-    template<typename T>
-    void vector<T>::resize_if_req()
+    template<typename T, typename Allocator>
+    void vector<T, Allocator>::resize_if_req()
     {
         if (_length == _capacity)
         {
@@ -97,39 +88,39 @@ namespace ft
         }
     }
     
-    template<typename T>
-    void vector<T>::pushBackInternal(T const &value)
+    template<typename T, typename Allocator>
+    void vector<T, Allocator>::pushBackInternal(T const &value)
     {
         new(buffer + _length) T(value);
         ++_length;
     }
 
-    template<typename T>
-    void vector<T>::reserveCapacity(std::size_t newCapacity)
+    template<typename T, typename Allocator>
+    void vector<T, Allocator>::reserveCapacity(std::size_t newCapacity)
     {
-        vector<T> tmpBuffer(newCapacity);
+        vector<T, Allocator> tmpBuffer(newCapacity);
         std::for_each(buffer, buffer + _length, [&tmpBuffer] (T const& v) {tmpBuffer.pushBackInternal(v);});
         tmpBuffer.swap(*this);
     }
     
 
-    template<typename T>
-    void vector<T>::swap(vector<T>& other)
+    template<typename T, typename Allocator>
+    void vector<T, Allocator>::swap(vector<T, Allocator>& other)
     {
         std::swap(_capacity, other._capacity);
         std::swap(_length, other._length);
         std::swap(buffer, other.buffer);
     }
 
-    template<typename T>    
-    void vector<T>::push_back(T const &value)
+    template<typename T, typename Allocator>    
+    void vector<T, Allocator>::push_back(T const &value)
     {
         resize_if_req();
         pushBackInternal(value);
     }
 
-    template<typename T>
-    void vector<T>::pop_back()
+    template<typename T, typename Allocator>
+    void vector<T, Allocator>::pop_back()
     {
             // manually call the destructor 
             --_length;

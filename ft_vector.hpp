@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/07 16:41:36 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/11 12:11:55 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,36 +22,46 @@
 
 namespace ft
 {
-    template<typename T>
+    template<typename T, class Allocator = std::allocator<T> > 
     class vector
     {
         // Typedefs to use throughout 
         public:
-        
-        using value_type = T;
-        using reference = T&;
-        using const_reference = T const&;
-        using pointer = T*;
-        using const_pointer = T const*;
-        using iterator = T*;
-        using const_iterator = T const*;
-        using riterator = std::reverse_iterator<iterator>;
-        using const_riterator = std::reverse_iterator<const_iterator>;
-        using difference_type = std::ptrdiff_t;
-        using size_type = std::size_t;
-        
 
+        typedef T value_type;
+        typedef Allocator allocator_type;
+        typedef typename allocator_type::pointer pointer;
+        typedef typename allocator_type::const_pointer const_pointer;
+        typedef typename allocator_type::reference reference;
+        typedef typename allocator_type::const_reference const_reference;
+        typedef typename allocator_type::size_type size_type;
+        typedef typename allocator_type::difference_type difference_type;
+        typedef T* iterator;
+        typedef const T*  const_iterator;
+        typedef std::reverse_iterator<iterator> reverse_iterator;
+        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+        
+        
         public:
 
-        //Constructors and Destructors 
-        vector(int capacity = 10);
-        template<typename I>
-        vector(I begin, I end);
+        //default constructor which constructs an empty container
+        explicit vector(const allocator_type& alloc = allocator_type());
+
+        // Fill constructor which constructs a container with n elements with value val
+        explicit vector(size_type n, const value_type& val = value_type(),
+                                const allocator_type& alloc = allocator_type());
+        
+        // range constructor which constructs a container with range first to last
+        template<class InputIterator>
+        vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+
+
+
         ~vector();
         
         // Copy Constructor 
         vector(vector const& rhs);
-        vector<T>&          operator=(vector<T> const &rhs);
+        vector<T, Allocator>&          operator=(vector<T, Allocator> const &rhs);
 
         // Methods 
         void                swap(vector& other);
@@ -74,19 +84,19 @@ namespace ft
 
         // Iterators 
         iterator            begin(){return (buffer);};
-        riterator           rbegin(){return (riterator(end()));};
+        reverse_iterator           rbegin(){return (reverse_iterator(end()));};
         const_iterator      begin() const{return (buffer);};
-        const_riterator     rbegin() const{return (const_riterator(end()));};
+        const_reverse_iterator     rbegin() const{return (const_riterator(end()));};
 
         iterator            end(){return (buffer + _length);};
-        riterator           rend(){return (riterator(begin()));};
+        reverse_iterator    rend(){return (reverse_iterator(begin()));};
         const_iterator      end() const{return (buffer + _length);};
-        const_riterator     rend() const{return (const_riterator(begin()));};
+        const_reverse_iterator     rend() const{return (const_reverse_iterator(begin()));};
 
         const_iterator      cbegin() const{return (begin());};
-        const_riterator     crbegin() const{return (rbegin());};
+        const_reverse_iterator     crbegin() const{return (rbegin());};
         const_iterator      cend() const{return (end());};
-        const_riterator     crend() const{return (rend());};
+        const_reverse_iterator     crend() const{return (rend());};
 
         //Comparison Operators 
         bool                operator!=(vector const &rhs) const {return !(*this == rhs);};
