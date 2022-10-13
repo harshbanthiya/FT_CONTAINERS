@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/11 12:11:55 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/13 11:08:25 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,18 +105,19 @@ namespace ft
         // Mutating Functions 
         void                push_back(T const &value);
         void                pop_back();
-        void                reserve(std::size_t capacityUpperBound);
+        void                reserve(size_type capacityUpperBound);
 
         private:
         
-        std::size_t         _capacity;
-        std::size_t         _length;  
+        allocator_type      _alloc;
+        size_type           _capacity;
+        size_type           _length;  
         T*                  buffer;
 
         void                resize_if_req();
         void                pushBackInternal(T const &value);
         void                validateIndex(size_type index) const {if (index >= _length) throw std::out_of_range("Out of Range");};
-        void                reserveCapacity(std::size_t newCapacity);
+        void                reserveCapacity(size_type newCapacity);
     };    
         
 } // namespace ft   

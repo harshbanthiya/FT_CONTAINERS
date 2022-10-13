@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/11 12:21:23 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/13 14:13:43 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,20 @@
 namespace ft
 {   
     template<typename T, typename Allocator>
-    vector<T, Allocator>::vector(const allocator_type& alloc)
+    vector<T, Allocator>::vector(const allocator_type& alloc) : _alloc(alloc), _capacity(2), _length(0), buffer(_alloc.allocate(_capacity))
     {
-        
+        std::uninitialized_fill(buffer, buffer + _capacity, 0);
+    }
+
+    template<typename T, typename Allocator>
+    vector<T, Allocator>::vector(size_type num, const T& val, const Allocator& a) : _alloc(a)
+    {
+        _capacity = num;
+        _length = num;
+        buffer = _alloc.allocate(num);
+
+        // initialize elements 
+        std::uninitialized_fill_n(buffer, num, val);     
     }
 
     template<typename T, typename Allocator>
@@ -70,8 +81,11 @@ namespace ft
     }
     
     template<typename T, typename Allocator>
-    void vector<T, Allocator>::reserve(std::size_t capacityUpperBound)
+    void vector<T, Allocator>::reserve(size_type capacityUpperBound)
     {
+        // reserve never shrinks memory
+        if (capacityUpperBound <= _capacity)
+            return ;
         if (capacityUpperBound > _capacity)
             reserveCapacity(capacityUpperBound);
     }
@@ -91,16 +105,26 @@ namespace ft
     template<typename T, typename Allocator>
     void vector<T, Allocator>::pushBackInternal(T const &value)
     {
-        new(buffer + _length) T(value);
+        uninitialized_fill(buffer, _length, value);
         ++_length;
     }
 
     template<typename T, typename Allocator>
-    void vector<T, Allocator>::reserveCapacity(std::size_t newCapacity)
+    void vector<T, Allocator>::reserveCapacity(size_type newCapacity)
     {
-        vector<T, Allocator> tmpBuffer(newCapacity);
-        std::for_each(buffer, buffer + _length, [&tmpBuffer] (T const& v) {tmpBuffer.pushBackInternal(v);});
-        tmpBuffer.swap(*this);
+        // Allocate new memory
+        T * tmp_buffer = _alloc.allocate(newCapacity);
+        // Copy old elements into new memory
+        std::uninitialized_copy(buffer, buffer + _length, tmp_buffer);
+        // Destroy old elements 
+        for (size_type i = 0; i < _length; ++i)
+            _alloc.destroy(&buffer[i]);
+        // Deallocate old memory
+        _alloc.deallocate(buffer, _capacity);
+
+        // Update
+        _capacity = newCapacity;
+        buffer = tmp_buffer;
     }
     
 
@@ -125,7 +149,7 @@ namespace ft
             // manually call the destructor 
             --_length;
             buffer[_length].~T();
-    }
+    }   
 
 } // namespace 
 
