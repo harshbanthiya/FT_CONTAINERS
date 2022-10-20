@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/20 13:17:01 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/20 13:49:52 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,14 @@ namespace ft
         fill_and_initialise(n, value_type());
         std::cout << "Constructor with number of elements called\n";
     }
-
+    
     template<typename T, typename Allocator>
     vector<T, Allocator>::vector(size_type num, const value_type& val) : _alloc(std::allocator<T>())
     {
         fill_and_initialise(num, val);
         std::cout <<  "Constructor with number of elements and their values called\n";
     }
+
 
     /*
         template<typename T, typename Allocator>

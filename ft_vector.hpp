@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/20 13:12:15 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/20 13:37:07 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <type_traits>
 #include <algorithm>
+#include <vector>
 #include <memory>
 #include <stdexcept>
 #include "MyIterator.hpp"
@@ -52,8 +53,8 @@ namespace ft
 
         explicit vector(size_type n);
 
-        // Fill constructor which constructs a container with n elements with value val
-        vector(size_type n, const value_type& val);
+       
+        explicit vector(size_type n, const value_type& val);
         
         // range constructor which constructs a container with range first to last
         template<class InputIterator>
