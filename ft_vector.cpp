@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/13 14:57:40 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/20 11:39:08 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,50 +15,102 @@
 
 #include "ft_vector.hpp"
 namespace ft
-{   
+{
     template<typename T, typename Allocator>
-    vector<T, Allocator>::vector(const allocator_type& alloc) : _alloc(alloc), _capacity(2), _length(0), buffer(_alloc.allocate(_capacity))
+    void vector<T,Allocator>::initialise_space(size_type n, size_type cap)
     {
-        std::uninitialized_fill(buffer, buffer + _capacity, 0);
+        try
+        {
+            _begin = _alloc.allocate(cap);
+            _length = _begin + n;
+            _capacity = _begin + cap;
+        }
+        catch(...)
+        {
+            _begin = nullptr;
+            _length = nullptr;
+            _capacity = nullptr;
+            throw ;
+        }
     }
 
     template<typename T, typename Allocator>
-    vector<T, Allocator>::vector(size_type num, const T& val, const Allocator& a) : _alloc(a)
+    void vector<T,Allocator>::fill_and_initialise(size_type n, const value_type &val)
     {
-        _capacity = num;
-        _length = num;
-        buffer = _alloc.allocate(num);
-
-        // initialize elements 
-        std::uninitialized_fill_n(buffer, num, val);     
+        const size_type init_size = std::max(static_cast<size_type>(16), n);
+        initialise_space(n, init_size);
+        std::uninitialized_fill_n(_begin, n, val);
     }
+
+    template<typename T, typename Allocator>
+    template<class Iter>
+    void vector<T,Allocator>::range_initialise(Iter first, Iter last)
+    {
+        const size_type init_size = std::max(static_cast<size_type>(last - first),
+                                                static_cast<size_type>(16));
+        intialise_space(static_cast<size_type>(last - first), init_size);
+        std::uninitialized_copy(first, last, _begin);
+    }
+
+    template<typename T, typename Allocator>
+    void  vector<T, Allocator>::destroy_and_recover(iterator first, iterator last, size_type n)
+    {
+        for(iterator i = first; i <= last; ++i)
+        {
+            i->~T();
+        }
+        _alloc.deallocate(first, n);
+    }
+
+    template<typename T, typename Allocator>
+    vector<T, Allocator>::vector()
+    {
+        try
+        {
+            _begin = _alloc.allocate(16);
+            _length = _begin;
+            _capacity = _begin + 16;
+        }
+        catch(...)
+        {
+            _begin = nullptr;
+            _length = nullptr;
+            _capacity = nullptr;
+        }
+        
+    }
+    
+    template<typename T, typename Allocator>
+    vector<T, Allocator>::vector(size_type n)
+    {
+        fill_and_initialise(n, value_type());
+    }
+
+    template<typename T, typename Allocator>
+    vector<T, Allocator>::vector(size_type num, const value_type& val)
+    {
+        fill_and_initialise(num, val);
+    }
+
+    template<typename T, typename Allocator>
+    template<class InputIterator>    
+    vector<T, Allocator>::vector(InputIterator first, InputIterator last)
+    {
+        range_initialise(first, last);
+    }
+
 
     template<typename T, typename Allocator>
     vector<T, Allocator>::~vector()
     {
-        for(std::size_t loop = 0; loop < _length; ++loop)
-        {
-            buffer[_length - 1 - loop].~T(); // Destroy elements in reverse order 
-        }
-        ::operator delete(buffer);
-        std::cout << "Vec Destructor called\n";    
+        destroy_and_recover(_begin, _length, _capacity - _begin);
+        _begin = _length = _capacity = nullptr;  
     }
     
     template<typename T, typename Allocator>
-    vector<T, Allocator>::vector(vector<T, Allocator> const& rhs) : _capacity(rhs._capacity), _length(0), buffer(static_cast<T *>(::operator new(sizeof(T) * _capacity)))
+    vector<T, Allocator>::vector(vector<T, Allocator> const& rhs)
     {
-            try
-            {
-                for (std::size_t loop = 0; loop < rhs._length; ++loop)
-                    push_back(rhs.buffer[loop]);
-            }
-            catch(const std::exception& ex)
-            {
-                ::operator delete(buffer);
-                for(std::size_t loop = 0; loop < _length; ++loop)
-                    buffer[_length - 1 - loop].~T();
-                throw(ex.what());
-            }
+        range_initialise(rhs._begin, rhs._length);
     }
     
     // To get the strong exception guarantee, I need to dump in a intermediate buffer
@@ -67,19 +119,29 @@ namespace ft
     template <typename T, typename Allocator>
     vector<T, Allocator>& vector<T, Allocator>::operator=(vector<T, Allocator> const &rhs)
     {   
-        if (&rhs == this)
-            return (*this);
-
-        // Create tmp stack vector in function scope, frees itself automatically 
-        // at closing brace of this function 
-        vector tmp(rhs);
-        
-        // Swap
-        tmp.swap(*this);
-        
-        return (*this);
+        if (this != &rhs)
+        {
+            const size_type len = rhs.size();
+            if (len > _capacity())
+            {
+                vector tmp(rhs._begin, rhs._length);
+                swap(tmp);
+            }
+            else if (size() >= len)
+            {
+                const size_type i = std::copy(rhs._begin(), rhs._length(), _begin());
+                _alloc.destroy(i, _length);
+                _length = _begin + len;
+            }
+            else 
+            {
+                std::copy(rhs._begin(), rhs._begin() + rhs.size(), _begin);
+                std::uninitialized_copy(rhs._begin() + size(), rhs._length(), _length);
+                _capacity = _length = _begin + len;
+            }
+        }
     }
-    
+    /*
     template<typename T, typename Allocator>
     void vector<T, Allocator>::reserve(size_type capacityUpperBound)
     {
@@ -150,7 +212,7 @@ namespace ft
             --_length;
             buffer[_length].~T();
     }   
-
+    */
 } // namespace 
 
 #endif

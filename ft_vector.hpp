@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/20 09:38:45 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/20 11:25:55 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <memory>
 #include <stdexcept>
-#include <iterator>
+#include "MyIterator.hpp"
 
 namespace ft
 {
@@ -48,15 +48,16 @@ namespace ft
         public:
 
         //default constructor which constructs an empty container
-        explicit vector(const allocator_type& alloc = allocator_type());
+        vector();
+
+        explicit vector(size_type n);
 
         // Fill constructor which constructs a container with n elements with value val
-        explicit vector(size_type n, const value_type& val = value_type(),
-                                const allocator_type& alloc = allocator_type());
+        explicit vector(size_type n, const value_type& val = value_type());
         
         // range constructor which constructs a container with range first to last
         template<class InputIterator>
-        vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+        vector(InputIterator first, InputIterator last);
 
 
 
@@ -70,30 +71,30 @@ namespace ft
         void                swap(vector& other);
 
         // Non Mutating Functions 
-        size_type           size() const{return (_length);};
-        bool                empty() const{return (_length == 0);};
+        size_type           size() const{return (static_cast<size_type>(_length - _begin));}
+        bool                empty() const{return (_begin == _length);}
 
         // Validated element access 
-        reference           at(size_type index){validateIndex(index); return (buffer[index]);};
-        const_reference     at(size_type index) const{validateIndex(index); return (buffer[index]);};
+        reference           at(size_type index){validateIndex(index); return ((*this)[index]);}
+        const_reference     at(size_type index) const{validateIndex(index); return ((*this)[index]);}
 
         // Non Validated element access 
-        reference           operator[](size_type index){return (buffer[index]);};
-        const_reference     operator[](size_type index) const{return (buffer[index]);};
-        reference           front(){return (buffer[0]);};
-        const_reference     front() const{return (buffer[0]);};
-        reference           back(){return (buffer[_length - 1]);};
-        const_reference     back() const{return (buffer[_length - 1]);};
+        reference           operator[](size_type index);
+        const_reference     operator[](size_type index) const;
+        reference           front(){return (*_begin);}
+        const_reference     front() const{return (*_begin);}
+        reference           back(){return (*(_length - 1));}
+        const_reference     back() const{return (*(_length - 1));}
 
         // Iterators 
-        iterator            begin(){return (buffer);};
+        iterator            begin(){return (_begin);}
         //reverse_iterator           rbegin(){return (reverse_iterator(end()));};
-        const_iterator      begin() const{return (buffer);};
+        const_iterator      begin() const{return (_begin);}
         //const_reverse_iterator     rbegin() const{return (const_riterator(end()));};
 
-        iterator            end(){return (buffer + _length);};
+        iterator            end(){return (_length);}
         //reverse_iterator    rend(){return (reverse_iterator(begin()));};
-        const_iterator      end() const{return (buffer + _length);};
+        const_iterator      end() const{return (_length);}
         //const_reverse_iterator     rend() const{return (const_reverse_iterator(begin()));};
 
         const_iterator      cbegin() const{return (begin());};
@@ -102,8 +103,8 @@ namespace ft
         //const_reverse_iterator     crend() const{return (rend());};
 
         //Comparison Operators 
-        bool                operator!=(vector const &rhs) const {return !(*this == rhs);};
-        bool                operator==(vector const &rhs) const {return (size() == rhs.size() && std::equal(begin(), end(), rhs.begin()));};
+        //bool                operator!=(vector const &rhs) const {return !(*this == rhs);};
+        //bool                operator==(vector const &rhs) const {return (size() == rhs.size() && std::equal(begin(), end(), rhs.begin()));};
         
         // Mutating Functions 
         void                push_back(T const &value);
@@ -113,11 +114,15 @@ namespace ft
         private:
         
         allocator_type      _alloc;
-        iterator           _capacity;
-        iterator           _length; 
         iterator           _begin; 
+        iterator           _length; 
+        iterator           _capacity;
         
-
+        void                fill_and_initialise(size_type n, const value_type& val);
+        void                initialise_space(size_type n, size_type cap );
+        template<class Iter>
+        void                range_initialise(Iter first, Iter last);
+        void                destroy_and_recover(iterator first, iterator last, size_type n);
         void                resize_if_req();
         void                pushBackInternal(T const &value);
         void                validateIndex(size_type index) const {if (index >= _length) throw std::out_of_range("Out of Range");};

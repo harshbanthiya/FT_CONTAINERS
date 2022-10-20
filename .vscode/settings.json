@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "iterator": "cpp",
-        "memory": "cpp"
-    },
-    "sonarlint.pathToCompileCommands": "${workspaceFolder}/compile_commands.json"
-}
