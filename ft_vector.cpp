@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/20 11:39:08 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/20 13:17:01 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft
     {
         try
         {
-            _begin = _alloc.allocate(cap);
+            _begin = static_cast<T*>(_alloc.allocate(cap));
             _length = _begin + n;
             _capacity = _begin + cap;
         }
@@ -48,7 +48,7 @@ namespace ft
     {
         const size_type init_size = std::max(static_cast<size_type>(last - first),
                                                 static_cast<size_type>(16));
-        intialise_space(static_cast<size_type>(last - first), init_size);
+        initialise_space(static_cast<size_type>(last - first), init_size);
         std::uninitialized_copy(first, last, _begin);
     }
 
@@ -63,13 +63,14 @@ namespace ft
     }
 
     template<typename T, typename Allocator>
-    vector<T, Allocator>::vector()
+    vector<T, Allocator>::vector() : _alloc(std::allocator<T>())
     {
         try
         {
-            _begin = _alloc.allocate(16);
+            _begin = static_cast<T*>(_alloc.allocate(16));
             _length = _begin;
             _capacity = _begin + 16;
+            std::cout << "Constructor super default, no except called\n";
         }
         catch(...)
         {
@@ -81,30 +82,36 @@ namespace ft
     }
     
     template<typename T, typename Allocator>
-    vector<T, Allocator>::vector(size_type n)
+    vector<T, Allocator>::vector(size_type n) : _alloc(std::allocator<T>())
     {
         fill_and_initialise(n, value_type());
+        std::cout << "Constructor with number of elements called\n";
     }
 
     template<typename T, typename Allocator>
-    vector<T, Allocator>::vector(size_type num, const value_type& val)
+    vector<T, Allocator>::vector(size_type num, const value_type& val) : _alloc(std::allocator<T>())
     {
         fill_and_initialise(num, val);
+        std::cout <<  "Constructor with number of elements and their values called\n";
     }
 
-    template<typename T, typename Allocator>
-    template<class InputIterator>    
-    vector<T, Allocator>::vector(InputIterator first, InputIterator last)
-    {
-        range_initialise(first, last);
-    }
+    /*
+        template<typename T, typename Allocator>
+        template<class InputIterator>    
+        vector<T, Allocator>::vector(InputIterator first, InputIterator last) : _alloc(std::allocator<T>())
+        {
+            range_initialise(first, last);
+            std::cout <<  "Range Constructor called\n";
+        }
+    */
 
 
     template<typename T, typename Allocator>
     vector<T, Allocator>::~vector()
     {
         destroy_and_recover(_begin, _length, _capacity - _begin);
-        _begin = _length = _capacity = nullptr;  
+        _begin = _length = _capacity = nullptr; 
+        std::cout <<  "Destructor called\n"; 
     }
     
     template<typename T, typename Allocator>
@@ -119,28 +126,30 @@ namespace ft
     template <typename T, typename Allocator>
     vector<T, Allocator>& vector<T, Allocator>::operator=(vector<T, Allocator> const &rhs)
     {   
-        if (this != &rhs)
-        {
-            const size_type len = rhs.size();
-            if (len > _capacity())
+
+            if (this != &rhs)
             {
-                vector tmp(rhs._begin, rhs._length);
-                swap(tmp);
+                const std::size_t len = rhs.size();
+                if (len > (_capacity - _begin))
+                {
+                    vector tmp(rhs._begin, rhs._length);
+                    swap(tmp);
+                }
+                else if ((_capacity - _begin) >= len)
+                {
+                    std::copy(rhs._begin, rhs._length, _begin);
+                    _length = _begin + len;
+                }
+                else
+                {
+                    std::copy(rhs._begin, rhs._begin + rhs.size(), _begin);
+                    std::uninitialized_copy(rhs._begin + size(), rhs._length, _length);
+                    _capacity  = _length = _begin + len;
+                }
             }
-            else if (size() >= len)
-            {
-                const size_type i = std::copy(rhs._begin(), rhs._length(), _begin());
-                _alloc.destroy(i, _length);
-                _length = _begin + len;
-            }
-            else 
-            {
-                std::copy(rhs._begin(), rhs._begin() + rhs.size(), _begin);
-                std::uninitialized_copy(rhs._begin() + size(), rhs._length(), _length);
-                _capacity = _length = _begin + len;
-            }
-        }
+        return (*this);
     }
+    
     /*
     template<typename T, typename Allocator>
     void vector<T, Allocator>::reserve(size_type capacityUpperBound)

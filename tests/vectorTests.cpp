@@ -8,11 +8,15 @@ TEST_CASE("FT_VECTOR_CONSTRUCTOR TEST", "[VECTOR]")
 {   
     SECTION("Default copy constructor or your implementation is making a shallow copy")
     {
-        ft::vector<int> x;
-        ft::vector<int> y;
-       // y = x;
-        ft::vector<int> z;
-     
+        ft::vector<int> v1;
+        ft::vector<int> v2(10);
+        //ft::vector<int> v3(10, 1);
+        //ft::vector<int> v4(a, a + 5);
+        //ft::vector<int> v5(v2);
+        //ft::vector<int> v6(std::move(v2));
+        //ft::vector<int> v7{ 1,2,3,4,5,6,7,8,9 };
+        ft::vector<int> v8, v9, v10;
+        
     /*
     
         std::vector<int> xv;

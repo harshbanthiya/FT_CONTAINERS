@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/20 11:25:55 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/20 13:12:15 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 namespace ft
 {
-    template<typename T, class Allocator = std::allocator<T> > 
+    template<typename T, typename Allocator = std::allocator<T> > 
     class vector
     {
         // Typedefs to use throughout 
@@ -30,7 +30,7 @@ namespace ft
 
         typedef Allocator                                       allocator_type;
         
-        typedef typename allocator_type::value_type             value_type;
+        typedef  T                                              value_type;
         typedef typename allocator_type::pointer                pointer;
         typedef typename allocator_type::const_pointer          const_pointer;
         typedef typename allocator_type::reference              reference;
@@ -53,7 +53,7 @@ namespace ft
         explicit vector(size_type n);
 
         // Fill constructor which constructs a container with n elements with value val
-        explicit vector(size_type n, const value_type& val = value_type());
+        vector(size_type n, const value_type& val);
         
         // range constructor which constructs a container with range first to last
         template<class InputIterator>
@@ -119,7 +119,7 @@ namespace ft
         iterator           _capacity;
         
         void                fill_and_initialise(size_type n, const value_type& val);
-        void                initialise_space(size_type n, size_type cap );
+        void                initialise_space(size_type n, size_type cap);
         template<class Iter>
         void                range_initialise(Iter first, Iter last);
         void                destroy_and_recover(iterator first, iterator last, size_type n);
