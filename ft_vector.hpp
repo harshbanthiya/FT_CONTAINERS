@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/13 11:08:25 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/20 09:38:45 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,22 @@ namespace ft
         // Typedefs to use throughout 
         public:
 
-        typedef T value_type;
-        typedef Allocator allocator_type;
-        typedef typename allocator_type::pointer pointer;
-        typedef typename allocator_type::const_pointer const_pointer;
-        typedef typename allocator_type::reference reference;
-        typedef typename allocator_type::const_reference const_reference;
-        typedef typename allocator_type::size_type size_type;
-        typedef typename allocator_type::difference_type difference_type;
-        typedef T* iterator;
-        typedef const T*  const_iterator;
-        typedef std::reverse_iterator<iterator> reverse_iterator;
-        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+        typedef Allocator                                       allocator_type;
         
+        typedef typename allocator_type::value_type             value_type;
+        typedef typename allocator_type::pointer                pointer;
+        typedef typename allocator_type::const_pointer          const_pointer;
+        typedef typename allocator_type::reference              reference;
+        typedef typename allocator_type::const_reference        const_reference;
+        typedef typename allocator_type::size_type              size_type;
+        typedef typename allocator_type::difference_type        difference_type;
+
+        typedef value_type*                                     iterator;
+        typedef const value_type*                               const_iterator;
+        /* 
+            typedef std::reverse_iterator<iterator> reverse_iterator;
+            typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+        */
         
         public:
 
@@ -84,19 +87,19 @@ namespace ft
 
         // Iterators 
         iterator            begin(){return (buffer);};
-        reverse_iterator           rbegin(){return (reverse_iterator(end()));};
+        //reverse_iterator           rbegin(){return (reverse_iterator(end()));};
         const_iterator      begin() const{return (buffer);};
-        const_reverse_iterator     rbegin() const{return (const_riterator(end()));};
+        //const_reverse_iterator     rbegin() const{return (const_riterator(end()));};
 
         iterator            end(){return (buffer + _length);};
-        reverse_iterator    rend(){return (reverse_iterator(begin()));};
+        //reverse_iterator    rend(){return (reverse_iterator(begin()));};
         const_iterator      end() const{return (buffer + _length);};
-        const_reverse_iterator     rend() const{return (const_reverse_iterator(begin()));};
+        //const_reverse_iterator     rend() const{return (const_reverse_iterator(begin()));};
 
         const_iterator      cbegin() const{return (begin());};
-        const_reverse_iterator     crbegin() const{return (rbegin());};
+        //const_reverse_iterator     crbegin() const{return (rbegin());};
         const_iterator      cend() const{return (end());};
-        const_reverse_iterator     crend() const{return (rend());};
+        //const_reverse_iterator     crend() const{return (rend());};
 
         //Comparison Operators 
         bool                operator!=(vector const &rhs) const {return !(*this == rhs);};
@@ -110,9 +113,10 @@ namespace ft
         private:
         
         allocator_type      _alloc;
-        size_type           _capacity;
-        size_type           _length;  
-        T*                  buffer;
+        iterator           _capacity;
+        iterator           _length; 
+        iterator           _begin; 
+        
 
         void                resize_if_req();
         void                pushBackInternal(T const &value);
