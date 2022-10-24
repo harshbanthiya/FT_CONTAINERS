@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/24 16:06:17 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/24 16:10:05 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ namespace ft
         reference                       operator[](size_type index);
         const_reference                 operator[](size_type index) const;
         
-        bool                            operator==(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator<(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator!=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator>(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator<=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator>=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
+        bool                            operator==(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
+        bool                            operator<(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
+        bool                            operator!=(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
+        bool                            operator>(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
+        bool                            operator<=(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
+        bool                            operator>=(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
 
         /*******************************************************************************/
         /*/////////////////////////////////////////////////////////////////////////////*/
@@ -128,9 +128,9 @@ namespace ft
 
         template<class Iter>
         iterator                        insert(const_iterator pos, Iter first, Iter last);
-        iterator                        insert(const_iterator pos, const vaue_type& value);
+        iterator                        insert(const_iterator pos, const value_type& value);
         iterator                        insert(const_iterator pos, value_type& value);
-        iterator                        insert(const_iterartor pos, size_type n, const value_type& value);
+        iterator                        insert(const_iterator pos, size_type n, const value_type& value);
 
         void                            push_back(const value_type& value);
         void                            push_back(value_type& value);
