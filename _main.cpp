@@ -9,7 +9,7 @@ int main()
 
         ft::vector<int> v1;
         ft::vector<int> v2(10);
-        ft::vector<char> v3(n, 'a');
-    ft::vector<std::string> a (n, "Hello world");
-    ft::vector<int> v8, v9, v10;
+        ft::vector<int> v4 = ft::vector<int> (6, 0);
+        ft::vector<std::string> a (n, "Hello world");
+        ft::vector<int> v8, v9, v10;
 }

@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/20 13:37:07 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/20 14:19:04 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,25 +48,25 @@ namespace ft
         
         public:
 
-        //default constructor which constructs an empty container
+        /***************************** Default Constructor and Destructor***************/
         vector();
+        ~vector();
 
-        explicit vector(size_type n);
+        /***************************** Copy Constructor ********************************/
+        vector(vector const& rhs);
+        vector<T, Allocator>&          operator=(vector<T, Allocator> const &rhs);
 
-       
+        /***************************** Other Constructors ******************************/
+        explicit vector(size_type n); 
         explicit vector(size_type n, const value_type& val);
-        
-        // range constructor which constructs a container with range first to last
         template<class InputIterator>
         vector(InputIterator first, InputIterator last);
 
 
 
-        ~vector();
         
-        // Copy Constructor 
-        vector(vector const& rhs);
-        vector<T, Allocator>&          operator=(vector<T, Allocator> const &rhs);
+        
+    
 
         // Methods 
         void                swap(vector& other);
