@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/20 14:27:36 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/24 13:14:06 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "ft_vector.hpp"
 namespace ft
 {
+    
     template<typename T, typename Allocator>
     void vector<T,Allocator>::initialise_space(size_type n, size_type cap)
     {
@@ -95,18 +96,14 @@ namespace ft
         std::cout <<  "Constructor with number of elements and their values called\n";
     }
 
-
-    /*
-        template<typename T, typename Allocator>
-        template<class InputIterator>    
-        vector<T, Allocator>::vector(InputIterator first, InputIterator last) : _alloc(std::allocator<T>())
-        {
+    template<typename T, typename Allocator>
+    template<class InputIterator>    
+    vector<T, Allocator>::vector(InputIterator first, InputIterator last) : _alloc(std::allocator<T>())
+    {
             range_initialise(first, last);
             std::cout <<  "Range Constructor called\n";
-        }
-    */
-
-
+    }
+    
     template<typename T, typename Allocator>
     vector<T, Allocator>::~vector()
     {
