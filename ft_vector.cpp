@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/24 13:14:06 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/24 15:54:52 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include "ft_vector.hpp"
 namespace ft
 {
+    /*----------------------------------------------------------------------------*/
+    /* Private Member functions ***************************************************/
+    /*----------------------------------------------------------------------------*/
     
     template<typename T, typename Allocator>
     void vector<T,Allocator>::initialise_space(size_type n, size_type cap)
@@ -50,7 +53,7 @@ namespace ft
         const size_type init_size = std::max(static_cast<size_type>(last - first),
                                                 static_cast<size_type>(16));
         initialise_space(static_cast<size_type>(last - first), init_size);
-        std::uninitialized_copy(first, last, _begin);
+        std::copy(first, last, _begin);
     }
 
     template<typename T, typename Allocator>
@@ -63,6 +66,15 @@ namespace ft
         _alloc.deallocate(first, n);
     }
 
+    /*******************************************************************************/
+    /*/////////////////////////////////////////////////////////////////////////////*/
+    /*******************************************************************************/
+    
+    
+    /*-----------------------------------------------------------------------------*/
+    /* Constructors and destructor *************************************************/
+    /*-----------------------------------------------------------------------------*/
+    
     template<typename T, typename Allocator>
     vector<T, Allocator>::vector() : _alloc(std::allocator<T>())
     {
@@ -100,6 +112,7 @@ namespace ft
     template<class InputIterator>    
     vector<T, Allocator>::vector(InputIterator first, InputIterator last) : _alloc(std::allocator<T>())
     {
+            FT_STL_DEBUG(!(last < first));
             range_initialise(first, last);
             std::cout <<  "Range Constructor called\n";
     }
@@ -118,10 +131,15 @@ namespace ft
         range_initialise(rhs._begin, rhs._length);
     }
     
-    // To get the strong exception guarantee, I need to dump in a intermediate buffer
-    // essentially creating a copy swap operation. 
-     
-    template <typename T, typename Allocator>
+    /*******************************************************************************/
+    /*/////////////////////////////////////////////////////////////////////////////*/
+    /*******************************************************************************/
+
+    /*-----------------------------------------------------------------------------*/
+    /* Operator overloaders *************************************************/
+    /*-----------------------------------------------------------------------------*/
+    
+    template <typename T, typename Allocator> // copy assignment operator
     vector<T, Allocator>& vector<T, Allocator>::operator=(vector<T, Allocator> const &rhs)
     {   
 
@@ -135,7 +153,7 @@ namespace ft
                 }
                 else if ((_capacity - _begin) >= len)
                 {
-                    std::copy(rhs._begin, rhs._length, _begin);
+                    std::copy(rhs._begin, rhs._length, _begin); // Destructor call check here
                     _length = _begin + len;
                 }
                 else
@@ -147,7 +165,104 @@ namespace ft
             }
         return (*this);
     }
+
+    /*******************************************************************************/
+    /*/////////////////////////////////////////////////////////////////////////////*/
+    /*******************************************************************************/
     
+    /*----------------------------------------------------------------------------*/
+    /* Member functions for inserting one or more values **************************/
+    /*----------------------------------------------------------------------------*/
+
+    template<typename T, typename Allocator>
+    void vector<T,Allocator>::fill_and_assign(size_type n, const value_type& val)
+    {
+        if (n < capacity())
+        {
+            vector tmp(n, val);
+            swap(tmp);
+        }
+        else if (n > size())
+        {
+            std::fill(_begin(), _length(), val);
+            _length = std::uninitialized_fill_n(_length, n - size(), val);
+        }
+        else 
+        {
+            erase(std::fill_n(_begin, n, val), _length);
+        }
+    }
+
+    template<typename T, typename Allocator>
+    template<typename Iiter>
+    void vector<T,Allocator>::copy_and_assign(Iiter first, Iiter last, input_iterator_tag)
+    {
+        iterator curr = _begin;
+        for (; first != last && curr != _length; ++first, ++curr)
+            *curr = *first;
+        if (first == last)
+            erase(curr, _length);
+        else 
+            insert(_length, first, last);
+    }
+
+    template<typename T, typename Allocator>
+    typename vector<T, Allocator>::iterator vector<T, Allocator>::fill_and_insert(vector<T, Allocator>::iterator pos, size_type n, const value_type& val)
+    {
+        if (n == 0)
+            return (pos);
+        const size_type xpos = pos - _begin;
+        const value_type value_copy = val;
+        if (static_cast<size_type>(_capacity - _length) >= n)
+        {
+            // Spare space is greater than or equal ot increased spaces
+            const size_type after_elems = _length - pos;
+            iterator old_len = _length;
+            if (after_elems > n)
+            {
+                std::uninitialized_copy(_length - n, _length, _length);
+                _length += n;
+                std::move_backward(pos, old_len - n, old_len);
+                std::uninitialized_fill_n(pos, n, value_copy);
+            }
+            else 
+            {
+                _length = std::uninitialized_fill_n(_length, n - after_elems, value_copy);
+                _length = std::move(pos, old_len, _length);
+                std::uninitialized_fill_n(pos, after_elems, value_copy);
+            }
+        }
+        else 
+        {
+            // if there is not enough space 
+            const size_type  new_size = get_new_capacity(n);
+            const iterator  new_begin = _alloc.allocate(new_size);
+            const iterator  new_length = new_begin;
+            
+            try
+            {
+                new_length = std::move(_begin, pos, new_begin);
+                new_length = std::uninitialized_fill_n(new_length, n, val);
+                new_length = std::move(pos, _length, new_length);
+            }   
+            catch(...)
+            {
+                destroy_and_recover(new_begin, new_length, new_size);
+                throw;
+            }
+            _alloc.deallocate(_begin, _capacity - _begin);
+            _begin = new_begin;
+            _length = new_length;
+            _capacity = _begin + new_size;
+            
+        }
+        return (_begin + xpos);
+    }
+    
+    /*******************************************************************************/
+    /*/////////////////////////////////////////////////////////////////////////////*/
+    /*******************************************************************************/    
+
     /*
     template<typename T, typename Allocator>
     void vector<T, Allocator>::reserve(size_type capacityUpperBound)

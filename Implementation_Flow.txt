@@ -1,0 +1,4 @@
+VECTOR IMPLEMENTATION 
+    - std::equal and std::lexicographical_compare need to substituted with my functions later 
+    - implement iterator reverse iterator for vector 
+    - Const proof and double check all functions that do not edit data, just return values.

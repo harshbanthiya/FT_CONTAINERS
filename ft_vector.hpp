@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/24 13:20:33 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/24 15:52:33 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <vector>
 #include <memory>
-#include <stdexcept>
+#include "ft_stdexcept.hpp"
 #include "MyIterator.hpp"
 
 namespace ft
@@ -62,15 +62,15 @@ namespace ft
         /*-----------------------------------------------------------------------------*/
 
         vector<T, Allocator>&           operator=(vector<T, Allocator> const &rhs);
-        reference                       operator[](size_type index);
-        const_reference                 operator[](size_type index) const;
+        reference                       operator[](size_type index){FT_STL_DEBUG(index < size()); return *(_begin + index);}
+        const_reference                 operator[](size_type index) const{FT_STL_DEBUG(index < size()); return *(_begin + index);}
         
-        bool                            operator==(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator<(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator!=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator>(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator<=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
-        bool                            operator>=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
+        bool                            operator==(vector const &lhs, vector const &rhs) {return(lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin()));}
+        bool                            operator<( vector const &lhs,  vector const &rhs)  {return(std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), lhs.end()));}
+        bool                            operator!=( vector const &lhs,  vector const &rhs) {return !(lhs == rhs);}
+        bool                            operator>( vector const &lhs,  vector const &rhs)  {return (rhs < lhs);}
+        bool                            operator<=( vector const &lhs,  vector const &rhs) {return !(rhs <lhs);}
+        bool                            operator>=( vector const &lhs,  vector const &rhs) {return !(lhs < rhs);}
 
         /*******************************************************************************/
         /*/////////////////////////////////////////////////////////////////////////////*/
@@ -80,25 +80,27 @@ namespace ft
         /* Member functions for accessing value ****************************************/
         /*-----------------------------------------------------------------------------*/
         
-        reference                       at(size_type index){validateIndex(index); return ((*this)[index]);}
-        const_reference                 at(size_type index) const{validateIndex(index); return ((*this)[index]);}
-        reference                       front(){return (*_begin);}
-        const_reference                 front() const{return (*_begin);}
-        reference                       back(){return (*(_length - 1));}
-        const_reference                 back() const{return (*(_length - 1));}
+        reference                       at(size_type index){THROW_OUT_OF_RANGE_IF(!(index < size()), "Vector<T>::at() out of range!"); return ((*this)[index]);}
+        const_reference                 at(size_type index) const{THROW_OUT_OF_RANGE_IF(!(index < size()), "Vector<T>::at() out of range!"); return ((*this)[index]);}
+        reference                       front(){FT_STL_DEBUG(!(empty())); return (*_begin);}
+        const_reference                 front() const{FT_STL_DEBUG(!(empty())); return (*_begin);}
+        reference                       back(){FT_STL_DEBUG(!(empty())); return (*(_length - 1));}
+        const_reference                 back() const{FT_STL_DEBUG(!(empty())); return (*(_length - 1));}
 
-        //reverse_iterator              rbegin(){return (reverse_iterator(end()));};
+        iterator                        begin() {return (_begin);}
         const_iterator                  begin() const{return (_begin);}
-        //const_reverse_iterator        rbegin() const{return (const_riterator(end()));};
-
         iterator                        end(){return (_length);}
-        //reverse_iterator              rend(){return (reverse_iterator(begin()));};
         const_iterator                  end() const{return (_length);}
-        //const_reverse_iterator        rend() const{return (const_reverse_iterator(begin()));};
 
         const_iterator                  cbegin() const{return (begin());};
-        //const_reverse_iterator        crbegin() const{return (rbegin());};
         const_iterator                  cend() const{return (end());};
+        
+        //reverse_iterator              rbegin(){return (reverse_iterator(end()));};
+        //const_reverse_iterator        rbegin() const{return (const_riterator(end()));};
+        //reverse_iterator              rend(){return (reverse_iterator(begin()));};
+        //const_reverse_iterator        rend() const{return (const_reverse_iterator(begin()));};
+
+        //const_reverse_iterator        crbegin() const{return (rbegin());};
         //const_reverse_iterator        crend() const{return (rend());};
 
         /*******************************************************************************/
@@ -109,10 +111,10 @@ namespace ft
         /* Member functions for reporting status ***************************************/
         /*-----------------------------------------------------------------------------*/
 
-        size_type                       size()  const;
-        size_type                       max_size()  const;
-        size_type                       capacity()  const;
-        bool                            empty()  const;
+        size_type                       size()  const {return (static_cast<size_type>(_length - _begin));}
+        size_type                       max_size()  const{return (static_cast<size_type>(-1) / sizeof(T));}
+        size_type                       capacity()  const {return (static_cast<size_type>(_capacity - _begin));};
+        bool                            empty()  const{return (_begin == _length);}
 
         /******************************************************************************/
         /*////////////////////////////////////////////////////////////////////////////*/
@@ -123,19 +125,15 @@ namespace ft
         /*----------------------------------------------------------------------------*/
 
         template<class Iter>
-        void                            assign(Iter first, Iter last);
-        void                            assign(size_type n, const value_type& value);
+        void                            assign(Iter first, Iter last){FT_STL_DEBUG(!(last, first)); copy_and_assign(first, last, my_iterator_category(first));}
+        void                            assign(size_type n, const value_type& value){fill_and_assign(n, value);}
 
         template<class Iter>
-        iterator                        insert(const_iterator pos, Iter first, Iter last);
-        iterator                        insert(const_iterator pos, const vaue_type& value);
-        iterator                        insert(const_iterator pos, value_type& value);
-        iterator                        insert(const_iterartor pos, size_type n, const value_type& value);
-
+        iterator                        insert(const_iterator pos, Iter first, Iter last){FT_STL_DEBUG(pos >= begin() && pos <= end() && !(last < first)); return (copy_and_insert(const_cast<iterator>(pos), first, last));}
+        iterator                        insert(const_iterator pos, const value_type& value);
+        iterator                        insert(const_iterator pos, size_type n, const value_type& value) {FT_STL_DEBUG(pos >= begin() && pos <= end()); return (fill_and_insert(const_cast<iterator>(pos), n, value));}
         void                            push_back(const value_type& value);
-        void                            push_back(value_type& value);
-
-
+ 
         /******************************************************************************/
         /*////////////////////////////////////////////////////////////////////////////*/
         /******************************************************************************/
@@ -176,15 +174,24 @@ namespace ft
         iterator                        _length; 
         iterator                        _capacity;
         
-        void                            fill_and_initialise(size_type n, const value_type& val);
-        void                            initialise_space(size_type n, size_type cap);
         template<class Iter>
         void                            range_initialise(Iter first, Iter last);
+        void                            fill_and_initialise(size_type n, const value_type& val);
+        void                            initialise_space(size_type n, size_type cap);
         void                            destroy_and_recover(iterator first, iterator last, size_type n);
+        
+        template<class Iiter>
+        void                            copy_and_assign(Iiter first, Iiter last, input_iterator_tag);
+        void                            fill_and_assign(size_type n, const value_type& value);
+        
+        template<class Iiter>
+        void                            copy_and_insert(iterator pos, Iiter first, Iiter last);
+        iterator                        fill_and_insert(iterator pos, size_type n, const value_type& val);
+
         void                            resize_if_req();
         void                            pushBackInternal(T const &value);
-        void                            validateIndex(size_type index) const {if (index >= _length) throw std::out_of_range("Out of Range");};
         void                            reserveCapacity(size_type newCapacity);
+        
 
         /******************************************************************************/
         /*////////////////////////////////////////////////////////////////////////////*/
