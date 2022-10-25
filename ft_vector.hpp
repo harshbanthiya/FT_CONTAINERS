@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/24 15:52:33 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/25 14:19:56 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ namespace ft
 
         iterator                        erase(const_iterator pos);
         iterator                        erase(const_iterator first, const_iterator last);
-        void                            clear();
+        void                            clear(){erase(begin(), end());}
         void                            pop_back();
 
         /******************************************************************************/
@@ -157,8 +157,8 @@ namespace ft
         
         void                            swap(vector& other);
         void                            reserve(size_type capacityUpperBound);
-        void                            resize(size_type new_size);
         void                            resize(size_type new_size, const value_type& val);
+        void                            resize(size_type new_size){ return resize(new_size, value_type()); }
         
         /******************************************************************************/
         /*////////////////////////////////////////////////////////////////////////////*/
@@ -187,11 +187,13 @@ namespace ft
         template<class Iiter>
         void                            copy_and_insert(iterator pos, Iiter first, Iiter last);
         iterator                        fill_and_insert(iterator pos, size_type n, const value_type& val);
+        void                            reallocate_insert(iterator pos, const value_type& val);
 
         void                            resize_if_req();
         void                            pushBackInternal(T const &value);
         void                            reserveCapacity(size_type newCapacity);
         
+        size_type                       get_new_capacity(size_type add_size);
 
         /******************************************************************************/
         /*////////////////////////////////////////////////////////////////////////////*/
