@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/25 14:21:27 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/25 14:44:44 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,8 +181,6 @@ namespace ft
         template<class Iter>
         void                            range_initialise(Iter first, Iter last);
         void                            destroy_and_recover(iterator first, iterator last, size_type n);
-<<<<<<< HEAD
-=======
         
         template<class Iiter>
         void                            copy_and_assign(Iiter first, Iiter last, input_iterator_tag);
@@ -193,16 +191,12 @@ namespace ft
         iterator                        fill_and_insert(iterator pos, size_type n, const value_type& val);
         void                            reallocate_insert(iterator pos, const value_type& val);
 
->>>>>>> 1d14a634af1b0e2b4a9031e13dddd58f9c4eb116
         void                            resize_if_req();
         void                            pushBackInternal(T const &value);
         void                            validateIndex(size_type index) const {if (index >= _length) throw std::out_of_range("Out of Range");};
         void                            reserveCapacity(size_type newCapacity);
-<<<<<<< HEAD
-=======
         
         size_type                       get_new_capacity(size_type add_size);
->>>>>>> 1d14a634af1b0e2b4a9031e13dddd58f9c4eb116
 
         /******************************************************************************/
         /*////////////////////////////////////////////////////////////////////////////*/
