@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/24 16:02:20 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/10/25 14:21:18 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,19 @@ namespace ft
     /*----------------------------------------------------------------------------*/
 
     template<typename T, typename Allocator>
+    typename vector<T, Allocator>::size_type vector<T, Allocator>::get_new_capacity(size_type add_size)
+    {
+        const size_type old_size = capacity();
+        THROW_LENGTH_ERROR_IF(old_size > max_size() - add_size, "Vector<T> size too big");
+        if (old_size > max_size() - old_size / 2)
+        {
+            return ((old_size + add_size > max_size() - 16) ? old_size + add_size : old_size + add_size + 16);
+        }
+        const size_type new_size = old_size == 0 ? std::max(add_size, static_cast<size_type>(16)) : std::max(old_size + old_size / 2, old_size + add_size);
+        return (new_size);
+    }
+
+    template<typename T, typename Allocator>
     void vector<T,Allocator>::fill_and_assign(size_type n, const value_type& val)
     {
         if (n < capacity())
@@ -204,6 +217,61 @@ namespace ft
             erase(curr, _length);
         else 
             insert(_length, first, last);
+    }
+
+    template<typename T, typename Allocator>
+    void vector<T, Allocator>::reallocate_insert(iterator pos, const value_type& val)
+    {
+        const size_type new_size = get_new_capacity(1);
+        iterator new_begin = _alloc.allocate(new_size);
+        iterator new_len = new_begin;
+        const value_type &value_copy = val;
+
+        try
+        {
+            new_len = std::move(_begin, pos, new_begin);
+            _alloc.construct(std::addressof(*new_len), value_copy);
+            ++new_len;
+            new_len = std::move(pos, _length, new_len);
+        }
+        catch(...)
+        {
+            _alloc.deallocate(new_begin, new_size);
+            throw ;
+        }
+        destroy_and_recover(_begin, _length, _capacity - _begin);
+        _begin = new_begin;
+        _length = new_len;
+        _capacity = new_begin + new_size;
+    }
+    
+    template<typename T, typename Allocator>
+    typename vector<T, Allocator>::iterator
+    vector<T, Allocator>::insert(const_iterator pos, const value_type& value)
+    {
+        FT_STL_DEBUG(pos >= begin() && pos <= end());
+        iterator xpos = const_cast<iterator>(pos);
+        const size_type n = pos - _begin;
+        if (_length != _capacity && xpos == _length)
+        {
+            _alloc.construct(std::addressof(*_length), *(_length - 1));
+            ++_length;
+        }
+        else if (_length != _capacity)
+        {
+            iterator new_len = _length;
+            _alloc.construct(std::addressof(*length), *(_length - 1));
+            ++new_len;
+            const value_type val_copy = value;
+            std::copy_backward(xpos, _length - 1, _length);
+            *xpos = std::move(val_copy);
+            _length = new_len;
+        }
+        else 
+        {
+            reallocate_insert(xpos, value);
+        }
+        return (_begin + n);
     }
 
     template<typename T, typename Allocator>
@@ -258,10 +326,160 @@ namespace ft
         }
         return (_begin + xpos);
     }
+
+    template<typename T, typename Allocator>
+    template<class Iiter>
+    void vector<T, Allocator>::copy_and_insert(iterator pos, Iiter first, Iiter last)
+    {
+        if (first == last)
+            return ;
+        std::size_t n = std::distance(first, last);   
+        if ((_capacity - _length) >= n)
+        {
+            // if spare space is sufficient 
+            const size_type after_elems = _length - pos;
+            iterator old_len = _length;
+            if (after_elems > n)
+            {
+                _length = std::copy(_length - n, _length, _length);
+                std::move_backward(pos, old_len - n, old_len);
+                std::copy(first, last, pos);
+            }
+            else 
+            {
+                Iiter mid = first;
+                std::advance(mid, after_elems);
+                _length = std::copy(mid, last, _length);
+                _length = std::move(pos, old_len, _length);
+                std::copy(first, mid, pos);
+            }
+        }
+        else 
+        {
+            // Not enough spare space 
+            const size_type new_size = get_new_capacity(n);
+            const iterator new_begin = _alloc.allocate(new_size);
+            const iterator new_length = new_begin;
+            
+            try
+            {
+                new_length = std::move(_begin, pos, new_begin);    
+                new_length = std::copy(first, last, new_length);
+                new_length = std::move(pos, _length, new_length);
+            }
+            catch(...)
+            {
+                destroy_and_recover(new_begin, new_length, new_size);
+                throw ;
+            }
+            _alloc.deallocate(_begin, _capacity - _begin);
+            _begin = new_begin;
+            _length = new_length;
+            _capacity = _begin + new_size;        
+        }
+    }
     
+    template<typename T, typename A>
+    void vector<T, A>::push_back(const value_type &val)
+    {
+        if (_length != _capacity)
+        {
+            _alloc.construct(std::addressof(*_length), val);
+            ++_length;
+        }    
+        else 
+            reallocate_insert(_length, val);
+    }
+
     /*******************************************************************************/
     /*/////////////////////////////////////////////////////////////////////////////*/
     /*******************************************************************************/    
+
+    /*----------------------------------------------------------------------------*/
+    /* Member functions for deleting one or more values ***************************/
+    /*----------------------------------------------------------------------------*/
+    
+    template<typename T, typename A>
+    typename vector<T, A>::iterator
+    vector<T, A>::erase(const_iterator pos)
+    {
+        FT_STL_DEBUG(pos >= begin() && pos < end());
+        iterator xpos = _begin + (pos - begin());
+        std::move(xpos + 1, _length, xpos);
+        _alloc.destroy(_length - 1);
+        --_length;
+        return xpos;
+    }
+    
+    template<typename T, typename A>
+    typename vector<T, A>::iterator
+    vector<T, A>::erase(const_iterator first, const_iterator last)
+    {
+        FT_STL_DEBUG(first >= begin() && last <= end() && !(last < first));
+        const iterator n = first - begin();
+        iterator r = _begin + (first - begin());
+        _alloc.destroy(std::move(r + (last - first), _length, r), _length);
+        _length = _length - (last - first);
+        return (_begin + n);
+    }
+    
+    template <typename T, typename A>
+    void vector<T,A>::pop_back()
+    {
+        FT_STL_DEBUG(!empty());
+        _alloc.destroy(_length - 1);
+        --_length;
+    }
+    
+    /*******************************************************************************/
+    /*/////////////////////////////////////////////////////////////////////////////*/
+    /*******************************************************************************/
+
+    /*----------------------------------------------------------------------------*/
+    /* Miscellaneous member functions *********************************************/
+    /*----------------------------------------------------------------------------*/
+
+    template<typename T, typename A>
+    void vector<T, A>::swap(vector<T, A> &rhs)
+    {
+        if (this != &rhs)
+        {
+            std::swap(_begin, rhs._begin);
+            std::swap(_length, rhs._length);
+            std::swap(_capacity, rhs._capacity);
+        }
+    }
+
+    template <typename T, typename A>
+    void vector<T, A>::reserve(size_type n)
+    {
+        if (capacity() < n)
+        {
+            THROW_LENGTH_ERROR_IF(n > max_size(), "n can not larger than max_size() in vector<T>::reserve(n)");
+            const size_type old_size = size();
+            iterator tmp = _alloc::allocate(n);
+            std::move(_begin, _length, tmp);
+            _alloc.deallocate(_begin, _capacity - _begin);
+            _begin = tmp;
+            _length = tmp + old_size;
+            _capacity = _begin + n;
+        }    
+    }
+
+
+    template<typename T, typename A>
+    void vector<T,A::resize(size_type new_size, const value_type &value)
+    {
+        if (new_size < size())
+            erase(begin() + new_size, end());
+        else 
+            insert(end(), new_size - size(), value);
+    }
+    
+
+    /*******************************************************************************/
+    /*/////////////////////////////////////////////////////////////////////////////*/
+    /*******************************************************************************/
 
     /*
     template<typename T, typename Allocator>
