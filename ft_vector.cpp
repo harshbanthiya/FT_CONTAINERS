@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 11:39:55 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/25 14:44:31 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/11/06 10:44:19 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ namespace ft
         else if (_length != _capacity)
         {
             iterator new_len = _length;
-            _alloc.construct(std::addressof(*length), *(_length - 1));
+            _alloc.construct(std::addressof(*_length), *(_length - 1));
             ++new_len;
             const value_type val_copy = value;
             std::copy_backward(xpos, _length - 1, _length);
@@ -457,7 +457,7 @@ namespace ft
         {
             THROW_LENGTH_ERROR_IF(n > max_size(), "n can not larger than max_size() in vector<T>::reserve(n)");
             const size_type old_size = size();
-            iterator tmp = _alloc::allocate(n);
+            iterator tmp = _alloc.allocate(n);
             std::move(_begin, _length, tmp);
             _alloc.deallocate(_begin, _capacity - _begin);
             _begin = tmp;
@@ -466,16 +466,14 @@ namespace ft
         }    
     }
 
-
     template<typename T, typename A>
-    void vector<T,A::resize(size_type new_size, const value_type &value)
-    {
+    void vector<T,A>::resize(size_type new_size, const value_type &value)
+    { 
         if (new_size < size())
             erase(begin() + new_size, end());
         else 
             insert(end(), new_size - size(), value);
     }
-    
 
     /*******************************************************************************/
     /*/////////////////////////////////////////////////////////////////////////////*/
