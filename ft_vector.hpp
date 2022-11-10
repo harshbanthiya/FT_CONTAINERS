@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/10/25 14:44:44 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/11/10 14:16:38 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
-#include "MyIterator.hpp"
+#include "Iterator.hpp"
+#include <iterator>
+
 
 namespace ft
 {
