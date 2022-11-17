@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/11/10 14:16:38 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/11/17 11:40:58 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ namespace ft
         reference                       operator[](size_type index);
         const_reference                 operator[](size_type index) const;
         
+        template <vector<T, 
         bool                            operator==(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
         bool                            operator<(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
         bool                            operator!=(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
