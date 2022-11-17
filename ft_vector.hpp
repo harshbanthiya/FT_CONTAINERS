@@ -203,18 +203,19 @@ namespace ft
 
 			// Constructor, Destructor and related functions. | * |  
 
-			vector(const Allocator& = Allocator()); // Default 
-			explicit vector(size_type n, const T& value = T(), const Allocator& = Allocator()); // Vector of size n with value 
+			explicit vector(const allocator_type& alloc = allocator_type()); // Default 
+			explicit vector(size_type n, const value_type& val = T()); // Vector of size n with value no allocator 
+			explicit vector(size_type n, const value_type& val = T(), const allocator_type& alloc); // Vector of size n with value 
 			
 			vector(const vector<T, Allocator>& x); // Copy constructor 
 			
-			template <typename InputIterator>
-			vector(InputIterator first, InputIterator last, const Allocator& = Allocator()); // Range based initialization 
+			//template <typename InputIterator> Need to work with enable if
+			//vector(InputIterator first, InputIterator last, const Allocator& = Allocator()); // Range based initialization 
 																							 // Construct vector last - first [first, last)		
 
 			vector<T, Allocator>&		operator=(const vector<T, Allocator> &x); // Assignment operator  
 
-			~vector(); // Destructor 
+			~vector() FT_NOEXCEPT{ if (this->_begin) {clear(); this->destruct_storage();}} // Destructor 
 
 			// Assign 
 			template<typename InputIterator>
@@ -224,11 +225,28 @@ namespace ft
 			void reserve(size_type n);
 			void swap(vector<T, Allocator>& x);
 
-		private:
-			iterator	begin;
-			iterator 	end;
-			iterator 	capacity;
+
+			// 
+
 	};
-}
+
+	// Functions from vector class 
+		// -- Vector Constructors
+
+		template<typename T, typename Allocator>
+		vector<T, Allocator>::vector(const allocator_type& alloc) : vector_base<T, Allocator>(size_type(), alloc) {}
+
+		template<typename T, typename Allocator>
+		vector<T, Allocator>::vector(size_type n) : vector_base<T, Allocator>(n, allocator_type()) { std::uninitialized_fill(this->_begin, this->_begin + n, value_type()); this->_end += n;}
+
+		template<typename T, typename Allocator>
+		vector<T, Allocator>::vector(size_type n, const value_type& val) : vector_base<T, Allocator>(n, allocator_type()) {std::uninitialized_fill(this->_begin, this->_begin + n, val); this->_end += n;}
+
+		template<typename T, typename Allocator>
+		vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& alloc) : vector_base<T, Allocator>(n, alloc) {std::uninitialized_fill(this->_begin, this->_begin + n, val); this->_end += n;}
+
+		
+}	
+
 
 #endif /* ******************************************************* FT_VECTOR_H */
