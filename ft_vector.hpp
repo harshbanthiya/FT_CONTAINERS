@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:29:19 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/11/10 14:16:38 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/11/17 10:38:23 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace ft
     {
         
         public:
-
+        
         typedef Allocator                                       allocator_type;
         typedef  T                                              value_type;
         typedef typename allocator_type::pointer                pointer;
@@ -42,41 +42,48 @@ namespace ft
         typedef value_type*                                     iterator;
         typedef const value_type*                               const_iterator;
     
-        /*-----------------------------------------------------------------------------*/
-        /* Constructors and destructor *************************************************/
-        /*-----------------------------------------------------------------------------*/
-
-        vector();
-        ~vector();
-        vector(vector const& rhs);
-
-        explicit vector(size_type n); 
-        explicit vector(size_type n, const value_type& val);
-        template<class InputIterator>
-        vector(InputIterator first, InputIterator last);
-
-        /*******************************************************************************/
-        /*/////////////////////////////////////////////////////////////////////////////*/
-        /*******************************************************************************/
-
-        /*-----------------------------------------------------------------------------*/
-        /* Overloaded operators ********************************************************/
-        /*-----------------------------------------------------------------------------*/
-
-        vector<T, Allocator>&           operator=(vector<T, Allocator> const &rhs);
-        reference                       operator[](size_type index);
-        const_reference                 operator[](size_type index) const;
         
-        bool                            operator==(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
-        bool                            operator<(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
-        bool                            operator!=(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
-        bool                            operator>(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
-        bool                            operator<=(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
-        bool                            operator>=(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs);
+        /* Constructors and destructor *************************************************/
 
-        /*******************************************************************************/
-        /*/////////////////////////////////////////////////////////////////////////////*/
-        /*******************************************************************************/
+        vector(const Allocator& = Allocator()); // Default constructor 
+        explicit vector(size_type n, const T& value = T(), const Allocator& = Allocator());  
+        // constructs a vector size n and initializes all its elements with value
+
+        // copy constructor
+        vector(const vector<T, Allocator>& x);
+
+        template<typename InputIterator>
+        vector(InputIterator first, InputIterator last, const Allocator& = Allocator());
+        // constructs a vector of size last - first and initializes it with copies of elements in that range [first, last)
+
+        // Assignment Operator 
+        vector<T, Allocator>& operator=(const vector<T, Allocator>& x);
+
+        template<typename InputIterator>
+        void assign(InputIterator first, InputIterator last);
+        // {clear(), insert(begin(), first, last);}
+        void assign(size_type n, const T& u);
+        // {clear(), insert(begin(), n, u);}
+
+        void reserve(size_type n);
+
+        // Destructor 
+        ~vector();
+
+        void swap(vector<T, Allocator>& x);
+
+        /* Comparison operators *************************************************/
+
+        template<typename T, typename Allocator>
+        bool operator==(const vector<T, Allocator> &x, const vector<T, Allocator> &y);
+        
+        template <typename T, typename Allocator>
+        bool operator<(const vector<T, Allocator> &x, const vector<T, Allocator> &y);
+        // Return true if x is lexicographically less than y, false otherwise
+
+        /* Element Access operators *************************************************/
+
+        
 
         /*-----------------------------------------------------------------------------*/
         /* Member functions for accessing value ****************************************/
@@ -89,18 +96,19 @@ namespace ft
         reference                       back(){return (*(_length - 1));}
         const_reference                 back() const{return (*(_length - 1));}
 
-        //reverse_iterator              rbegin(){return (reverse_iterator(end()));};
-        const_iterator                  begin() const{return (_begin);}
-        //const_reverse_iterator        rbegin() const{return (const_riterator(end()));};
-
+        iterator                        begin();
+        const_iterator                  begin() const {return (_begin);}
         iterator                        end(){return (_length);}
-        //reverse_iterator              rend(){return (reverse_iterator(begin()));};
         const_iterator                  end() const{return (_length);}
+        
+        //reverse_iterator              rbegin(){return (reverse_iterator(end()));};
+        //const_reverse_iterator        rbegin() const{return (const_riterator(end()));};
+        //reverse_iterator              rend(){return (reverse_iterator(begin()));};
         //const_reverse_iterator        rend() const{return (const_reverse_iterator(begin()));};
 
         const_iterator                  cbegin() const{return (begin());};
-        //const_reverse_iterator        crbegin() const{return (rbegin());};
         const_iterator                  cend() const{return (end());};
+        //const_reverse_iterator        crbegin() const{return (rbegin());};
         //const_reverse_iterator        crend() const{return (rend());};
 
         /*******************************************************************************/
@@ -113,6 +121,7 @@ namespace ft
 
         size_type                       size()  const;
         size_type                       max_size()  const;
+
         size_type                       capacity()  const;
         bool                            empty()  const;
 
@@ -161,7 +170,7 @@ namespace ft
         
         void                            swap(vector& other);
         void                            reserve(size_type capacityUpperBound);
-        void                            resize(size_type new_size, const value_type& val);
+        void                            resize(size_type new_size, const value_type& val = T());
         void                            resize(size_type new_size){ return resize(new_size, value_type()); }
         
         /******************************************************************************/
