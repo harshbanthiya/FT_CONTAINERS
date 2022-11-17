@@ -8,6 +8,110 @@
 
 namespace ft
 {
+
+	// Vector base class
+	template<typename _T, class _Allocator = std::allocator<_T>()>
+	class vector_base
+	{
+		public:
+		
+			typedef _Allocator								allocator_type;
+			typedef allocator_traits<allocator_type>		_alloc_traits;
+			typedef typename _alloc_traits::size_type		size_type;
+		
+		protected:
+
+			typedef _T										value_type;
+			typedef value_type&								reference;
+			typedef const value_type&						const_reference;
+			typedef typename _alloc_traits::difference_type difference_type;
+			typedef typename _alloc_traits::pointer 		pointer;
+			typedef typename _alloc_traits::const_pointer 	const_pointer;
+
+			pointer											_begin;
+			pointer 										_end;
+			pointer 										_capacity;
+			allocator_type									_a;
+		
+			// Constructors and Destructor
+			
+			vector_base() FT_NOEXCEPT;
+  			vector_base(const allocator_type& a) FT_NOEXCEPT;
+  			vector_base(size_type n);
+  			vector_base(size_type n, const allocator_type& alloc);
+  			~vector_base() FT_NOEXCEPT {if (__begin) _a_.deallocate(_begin_, capacity());}
+		
+			// Storage Management Functions 
+
+			pointer 	construct_storage(size_type n) {return (n == 0 ? pointer() : _a.allocate(n));}
+			void		destruct_storage() FT_NOEXCEPT;
+
+			size_type 	capacity() const FT_NOEXCEPT { return static_cast<size_type>(_capacity - _begin);}
+			size_type 	check_length(size_type n) {if (n > a.max_size()) _throw_length_error("Vector: Size too big"); return n;}
+
+			void 		copy_data(vector_base const &other) FT_NOEXCEPT;
+			void 		copy_data(pointer const& _new_begin, pointer const& _new_end, pointer const& new_cap) FT_NOEXCEPT;
+			void 		swap_data(vector_base& other) FT_NOEXCEPT;
+
+			// Error Functions 
+
+			void		_throw_out_of_range(const char *msg) const {throw std::out_of_range(msg);}
+			void		_throw_length_error(const char *msg) const {throw std::length_error(msg);}
+
+		private:
+
+			vector_base(const vector_base& other) {(void)other;}
+			vector_base& operator=(const vector_base& other) {(void) other;}
+	};
+
+
+	// Functions from vector base class 
+		// -- Vector Base Constructors
+
+		template<typename T, typename _Allocator>
+		vector_base<T, _Allocator>::vector_base() FT_NOEXCEPT : _begin(NULL), _end(NULL), _capacity(NULL), _a(std::allocator<T>()) {}
+
+		template<typename T, typename _Allocator>
+		vector_base<T, _Allocator>::vector_base(const allocator_type& a) FT_NOEXCEPT : _begin(NULL), _end(NULL), _capacity(NULL), _a(a) {}
+
+		template<typename T, typename _Allocator>
+		vector_base<T, _Allocator>::vector_base(size_type n) FT_NOEXCEPT : _a(std::allocator<T>()) {_begin = construct_storage(n); _end = _begin; _capacity = _begin + n;}
+
+		template<typename T, typename _Allocator>
+		vector_base<T, _Allocator>::vector_base(size_type n, const allocator_type& a) FT_NOEXCEPT : _a(a) {_begin = construct_storage(n); _end = _begin; _capacity = _begin + n;}
+
+		
+		// -- Vector Base Storage Management 
+
+		template<typename T, typename _Allocator>
+		void vector_base<T, _Allocator>::copy_data(vector_base const& other) FT_NOEXCEPT {_begin = other._begin; _end = other._end; _capacity = other._capacity;}
+
+		template<typename T, typename _Allocator>
+		void vector_base<T, _Allocator>::copy_data(pointer const& b, pointer const& e, pointer const& c)  FT_NOEXCEPT {_begin = b; _end = e; _capacity = c;}
+
+		template<typename T, typename _Allocator>
+		void vector_base<T, _Allocator>::swap_data(vector_base &other) FT_NOEXCEPT
+		{
+			pointer tmp_begin(_begin);
+			pointer tmp_end(_end);
+			pointer tmp_cap(_capacity);
+			allocator_type tmp_a(_a);
+
+			this->copy_data(other);
+			this->_a = other._a;
+			other.copy_data(tmp_begin, tmp_end, tmp_cap);
+			other.a - tmp_a;
+		}
+
+		template<typename T, typename _Allocator>
+		void vector_base<T, _Allocator>::destruct_storage() FT_NOEXCEPT
+		{
+			_a.deallocate(_begin, capacity());
+			_end = _begin = _capacity = NULL;
+		}
+	
+
+	// Vector Iterator Class 
 	template<typename iter>
 	class vector_iter
 	{
@@ -47,11 +151,11 @@ namespace ft
 
  		private:
 
-  			iterator_type																it;
+  			iterator_type														it;
 
 	};
 
-
+	// Vector Non Member Operations 
 	template<typename Iter1, typename Iter2>
 	inline bool operator==(const vector_iter<Iter1>& x, const vector_iter<Iter2>& y) FT_NOEXCEPT {return (x.base() == y.base());}
 	template<typename Iter1, typename Iter2>
@@ -66,30 +170,35 @@ namespace ft
 	template<typename Iter1, typename Iter2>
 	inline bool operator>=(const vector_iter<Iter1>& x, const vector_iter<Iter2>& y) FT_NOEXCEPT {return !(x < y);}
 
-	//template<typename Iter1, typename Iter2>
-	//inline bool operator-(const vector_iter<Iter1>& x, const vector_iter<Iter2>& y) FT_NOEXCEPT {return (x.base() < y.base());}
-	//template<typename Iter1, typename Iter2>
-	//inline bool operator>(const vector_iter<Iter1>& x, const vector_iter<Iter2>& y) FT_NOEXCEPT {return (y < x);}
+	template<typename Iter1, typename Iter2>
+	inline typename vector_iter<Iter1>::difference_type operator-(const vector_iter<Iter1>& x, const vector_iter<Iter2>& y) FT_NOEXCEPT {return (x.base() - y.base());}
+	template<typename Iter1>
+	inline vector_iter<Iter1> operator+(typename vector_iter<Iter1>::difference_type n, const vector_iter<Iter1> x) FT_NOEXCEPT {x += n; return (x);}
 
-
-	template <typename T, typename Allocator = std::allocator<T>()>
-	class vector
+	// Vector main class 
+	template <typename T, typename Allocator = std::allocator<T> >
+	class vector : private vector_base<T, Allocator>
 	{
+		static_assert(!std::is_same<bool, T>::value, "vector<bool> is not supported in my containers implementation.");
+		
+		private: 
+			typedef vector_base<T, Allocator>					base;
+
 		public:
 
 			typedef T                                        	value_type;
-			typedef Allocator                                	allocator_type;
-			typedef typename allocator_type::reference       	reference;
-			typedef typename allocator_type::const_reference 	const_reference;
-			typedef typename allocator_type::size_type       	size_type;
-			typedef typename allocator_type::difference_type 	difference_type;
-			typedef typename allocator_type::pointer         	pointer;
-			typedef typename allocator_type::const_pointer   	const_pointer;
+			typedef Allocator                         			allocator_type;
+			typedef typename base::reference       				reference;
+			typedef typename base::const_reference 				const_reference;
+			typedef typename base::size_type       				size_type;
+			typedef typename base::difference_type 				difference_type;
+			typedef typename base::pointer         				pointer;
+			typedef typename base::const_pointer   				const_pointer;
 
-			typedef vector_iter									iterator;
-			typedef vector_iter                   				const_iterator;
-			typedef ft::reverse_iterator<iterator>          	reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>    	const_reverse_iterator;
+			typedef vector_iter<pointer>						iterator;
+			typedef vector_iter<const_pointer>                  const_iterator;
+			//typedef ft::reverse_iterator<iterator>          	reverse_iterator;
+			//typedef ft::reverse_iterator<const_iterator>    	const_reverse_iterator;
 
 
 			// Constructor, Destructor and related functions. | * |  
@@ -116,7 +225,9 @@ namespace ft
 			void swap(vector<T, Allocator>& x);
 
 		private:
-
+			iterator	begin;
+			iterator 	end;
+			iterator 	capacity;
 	};
 }
 
