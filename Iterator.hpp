@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 09:50:58 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/11/10 14:20:53 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/11/20 12:31:49 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define ITERATOR_HPP
 
 #include <cstddef>
+#include <iterator>
 
 namespace ft
 {
