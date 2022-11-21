@@ -9,3 +9,4 @@
 #include "type-traits/remove-foo.hpp"
 #include "type-traits/is-foo.hpp"
 #include "type-traits/is-function.hpp"
+#include "type-traits/is_convertible.hpp"
