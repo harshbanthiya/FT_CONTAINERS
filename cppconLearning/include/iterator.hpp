@@ -4,3 +4,5 @@
 #include "algorithm/iterator-tags.hpp"
 #include "traits-classes/iterator-traits.hpp"
 #include "algorithm/reverse_iterator.hpp"
+
+#include <memory>

@@ -72,5 +72,9 @@ namespace ft
 }
 
 /*
-    
+    - `operator+` and `operator-` are non-member functions.
+    - `operator+` and `operator-` take their iterator parameter by value, not by const reference,
+        to eliminate one usually-unnecessary copy.
+    - The non-static data member of type `It` is not `protected` but `private`;
+        accessing it directly is not supported in this implementation.
 */
