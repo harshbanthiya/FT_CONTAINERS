@@ -61,7 +61,8 @@ namespace ft
     template <class Alloc>
     struct allocator_traits 
     {
-        using allocator_type = Alloc;
+        typedef Alloc                           allocator_type;
+        typedef allocator_value_type_t<Alloc>   value_type;
         using value_type = allocator_value_type_t<Alloc>;
 
         using pointer = allocator_pointer_t<Alloc>;
@@ -149,14 +150,6 @@ namespace ft
     };
 
 }
-
-
-
-
-
-
-
-
 
 
 /*
