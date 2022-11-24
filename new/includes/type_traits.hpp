@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 10:43:24 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/11/23 13:39:25 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/11/24 09:37:55 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,6 @@ namespace ft
 
     template <bool, typename T = void>
     struct enable_if{};
-
-    template <typename T>
-    struct enable_if<true, T> {typedef T type;};
 
     template <typename T>
     struct enable_if<true, T> {typedef T type;};

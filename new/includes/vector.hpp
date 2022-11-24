@@ -41,15 +41,15 @@ namespace ft
   			vector_base(const allocator_type& a) FT_NOEXCEPT;
   			vector_base(size_type n);
   			vector_base(size_type n, const allocator_type& alloc);
-  			~vector_base() FT_NOEXCEPT {if (_begin) _a.deallocate(_begin, capacity());}
+  			~vector_base() FT_NOEXCEPT {if (_begin) _a.deallocate(_begin, __capacity());}
 		
 			// Storage Management Functions 
 
 			pointer 	construct_storage(size_type n) {return (n == 0 ? pointer() : _a.allocate(n));}
 			void		destruct_storage() FT_NOEXCEPT;
 
-			size_type 	capacity() const FT_NOEXCEPT { return static_cast<size_type>(_capacity - _begin);}
-			size_type 	check_length(size_type n) {if (n > _a.max_size()) _throw_length_error("Vector: Size too big"); return n;}
+			size_type 	__capacity() const FT_NOEXCEPT { return static_cast<size_type>(_capacity - _begin);}
+			size_type 	check_length(size_type n) {if (n > _a.max_size()) throw_length_error("Vector: Size too big"); return n;}
 
 			void 		copy_data(vector_base const &other) FT_NOEXCEPT;
 			void 		copy_data(pointer const& _new_begin, pointer const& _new_end, pointer const& new_cap) FT_NOEXCEPT;
@@ -57,8 +57,8 @@ namespace ft
 
 			// Error Functions 
 
-			void		_throw_out_of_range(const char *msg) const {throw std::out_of_range(msg);}
-			void		_throw_length_error(const char *msg) const {throw std::length_error(msg);}
+			void		throw_out_of_range(const char *msg) const {throw std::out_of_range(msg);}
+			void		throw_length_error(const char *msg) const {throw std::length_error(msg);}
 
 		private:
 
@@ -76,10 +76,10 @@ namespace ft
 		vector_base<T, _Allocator>::vector_base(const allocator_type& a) FT_NOEXCEPT : _begin(NULL), _end(NULL), _capacity(NULL), _a(a) {}
 
 		template<typename T, typename _Allocator>
-		vector_base<T, _Allocator>::vector_base(size_type n) FT_NOEXCEPT : _a(std::allocator<T>()) {_begin = construct_storage(n); _end = _begin; _capacity = _begin + n;}
+		vector_base<T, _Allocator>::vector_base(size_type n) : _a(std::allocator<T>()) {_begin = construct_storage(n); _end = _begin; _capacity = _begin + n;}
 
 		template<typename T, typename _Allocator>
-		vector_base<T, _Allocator>::vector_base(size_type n, const allocator_type& a) FT_NOEXCEPT : _a(a) {_begin = construct_storage(n); _end = _begin; _capacity = _begin + n;}
+		vector_base<T, _Allocator>::vector_base(size_type n, const allocator_type& a) : _a(a) {_begin = construct_storage(n); _end = _begin; _capacity = _begin + n;}
 
 		
 		// -- Vector Base Storage Management 
@@ -101,13 +101,13 @@ namespace ft
 			this->copy_data(other);
 			this->_a = other._a;
 			other.copy_data(tmp_begin, tmp_end, tmp_cap);
-			other.a - tmp_a;
+			other._a = tmp_a;
 		}
 
 		template<typename T, typename _Allocator>
 		void vector_base<T, _Allocator>::destruct_storage() FT_NOEXCEPT
 		{
-			_a.deallocate(_begin, capacity());
+			_a.deallocate(_begin, __capacity());
 			_end = _begin = _capacity = NULL;
 		}
 
@@ -233,7 +233,6 @@ namespace ft
 
 			void 				        push_back(const value_type& val);
 			void 				        pop_back() FT_NOEXCEPT;
-            
 
             template <typename InputIterator>
 			void 				        insert(iterator position, InputIterator first, typename enable_if<_is_input_iterator<InputIterator>::value && !_is_forward_iterator<InputIterator>::value, InputIterator>::type last);
@@ -241,11 +240,7 @@ namespace ft
             void 				        insert(iterator position, ForwardIterator first, typename enable_if<_is_forward_iterator<ForwardIterator>::value, ForwardIterator>::type last);
 			iterator 			        insert(iterator position, const value_type& val);
 			void				        insert(iterator position, size_type n , const value_type& val);
-			
-            void 				        swap(vector<T, Allocator>& x);
-
-
-
+		
 			iterator 			        erase(iterator position);
 			iterator			        erase(iterator first, iterator last);
 
@@ -257,7 +252,7 @@ namespace ft
 			size_type			        size() const {return ft::distance(this->_begin, this->_end);}
 			size_type			        max_size() const { return std::min(static_cast<size_type>(std::numeric_limits<difference_type>::max()), this->_a.max_size());}
 			void 				        resize(size_type n, value_type val = value_type());
-			size_type 			        capacity() const {return this->_capacity();}
+			size_type 			        capacity() const {return this->__capacity();}
 			bool 				        empty() const {return this->_begin == this->_end;}
 			void 				        reserve(size_type n);
 
@@ -265,8 +260,8 @@ namespace ft
 			// Element Access 
 			reference			        operator[](size_type n) {return reference(*(this->_begin + n));}
 			const_reference		        operator[](size_type n) const {return const_reference(*(this->_begin + n));}
-			reference 			        at(size_type n) {if (n > size()) this->throw_out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
-			const_reference 	        at(size_type n) const {if (n > size()) this->throw_out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
+			reference 			        at(size_type n) {if (n > this->size()) this->throw_out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
+			const_reference 	        at(size_type n) const {if (n > this->size()) this->throw_out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
 			reference 			        front() { return *this->_begin;}
 			const_reference 	        front() const { return *this->_begin;}
 			reference 			        back() { return *(this->_end - 1);}
@@ -277,10 +272,10 @@ namespace ft
 			const_iterator 		        begin() const {return this->_begin;}
 			iterator 			        end() {return this->_end;}
 			const_iterator		        end() const {return this->_end;}
-			reverse_iterator		    rbegin() {return reverse_iterator(_end);}
-			const_reverse_iterator		rbegin() const {return reverse_iterator(_end);}
-			reverse_iterator		    rend() {return reverse_iterator(_begin);}
-			const_reverse_iterator		rend() const {return reverse_iterator(_begin);}
+			reverse_iterator		    rbegin() {return reverse_iterator(end());}
+			const_reverse_iterator		rbegin() const {return reverse_iterator(end());}
+			reverse_iterator		    rend() {return reverse_iterator(begin());}
+			const_reverse_iterator		rend() const {return reverse_iterator(begin());}
 
 		private: 
 
@@ -309,7 +304,7 @@ namespace ft
 
         template <typename T, typename Allocator>
         template <typename InputIterator>
-        vector<T, Allocator>::vector(InputIterator first, typename enable_if<_is_input_iterator<InputIterator>::value && !_is_forward_iterator<InputIterator>::value, InputIterator>::type last, const allocator_type& alloc) : vector_base<T, Allocator>(n, alloc)
+        vector<T, Allocator>::vector(InputIterator first, typename enable_if<_is_input_iterator<InputIterator>::value && !_is_forward_iterator<InputIterator>::value, InputIterator>::type last, const allocator_type& alloc) : vector_base<T, Allocator>(size_type(), alloc)
         { for(; first != last; ++first) push_back(*first);}
 
         template <typename T, typename Allocator>
@@ -513,7 +508,7 @@ namespace ft
             pointer _p = this->_being + _diff;
             pointer _old_end = this->_end;
 
-            for (int i = 0; first != last; ++first; ++i)
+            for (int i = 0; first != last; ++first, ++i)
                 insert(position + i, *first);
         }
 
@@ -531,7 +526,7 @@ namespace ft
             
             pointer _p = this->_begin + _diff;
             pointer _old_end = this->_end;
-            while (_old_end != p)
+            while (_old_end != _p)
             {
                 --_old_end;
                 this->_a.construct(_old_end + _in_size, *(_old_end));
@@ -583,7 +578,7 @@ namespace ft
 		// Comparison Operators 
 
 		template<typename T, typename Allocator>
-		inline bool operator==(const vector<T, Allocator>&lhs, const vector<T, Allocator>& rhs){return (lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs,end(), rhs.begin()));}
+		inline bool operator==(const vector<T, Allocator>&lhs, const vector<T, Allocator>& rhs){return (lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin()));}
 		template<typename T, typename Allocator>
 		inline bool operator!=(const vector<T, Allocator>&lhs, const vector<T, Allocator>& rhs){return !(lhs == rhs);}
 		template<typename T, typename Allocator>

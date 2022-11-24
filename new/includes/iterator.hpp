@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 15:59:26 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/11/23 15:59:26 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/11/24 10:04:07 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,13 @@ namespace ft
                                                   is_same<typename Iter::iterator_category, random_access_iterator_tag>::value > {};
     
     template <typename Iter>
-    struct iterator_traits : _iterator_traits<Iter, _has_iterator_typedefs<Iter>::value {};
+    struct iterator_traits : _iterator_traits<Iter, _has_iterator_typedefs<Iter>::value> {};
 
     // Traits specialisation for pointers 
     template <typename T>
     struct iterator_traits<T *>
     {
-        typedef     random_acess_iterator_tag   iterator_category;
+        typedef     random_access_iterator_tag  iterator_category;
         typedef     T                           value_type;
         typedef     ptrdiff_t                   difference_type;
         typedef     T*                          pointer;
@@ -110,7 +110,7 @@ namespace ft
     template <typename T>
     struct iterator_traits<const T*>
     {
-        typedef     random_acess_iterator_tag   iterator_category;
+        typedef     random_access_iterator_tag   iterator_category;
         typedef     typename remove_cv<T>::type value_type;
         typedef     ptrdiff_t                   difference_type;
         typedef     const T*                    pointer;
@@ -145,25 +145,25 @@ namespace ft
                                                                     is_same<typename _is_iterator<Iter>::category, random_access_iterator_tag>::value ) > {};
 
     template <typename Iter>
-    struct _is_output_iterator : integral_constant<bool, (          is_same<typename _is_iterator<Iter>::category, output_iterator_tag>::value) {};
+    struct _is_output_iterator : integral_constant<bool, (          is_same<typename _is_iterator<Iter>::category, output_iterator_tag>::value)> {};
 
     template <typename Iter>
     struct _is_forward_iterator : integral_constant<bool, (         is_same<typename _is_iterator<Iter>::category, forward_iterator_tag>::value ||
                                                                     is_same<typename _is_iterator<Iter>::category, bidirectional_iterator_tag>::value ||
-                                                                    is_same<typename _is_iterator<Iter>::category, random_access_iterator_tag>::value ) {};
+                                                                    is_same<typename _is_iterator<Iter>::category, random_access_iterator_tag>::value )> {};
     
     template <typename Iter>
     struct _is_bidirectional_iterator : integral_constant<bool, (   is_same<typename _is_iterator<Iter>::category, bidirectional_iterator_tag>::value ||
-                                                                    is_same<typename _is_iterator<Iter>::category, random_access_iterator_tag>::value ) {};
+                                                                    is_same<typename _is_iterator<Iter>::category, random_access_iterator_tag>::value )> {};
 
     template <typename Iter>
-    struct _is_random_access_iterator : integral_constant<bool, (   is_same<typename _is_iterator<Iter>::category, random_access_iterator_tag>::value ) {};
+    struct _is_random_access_iterator : integral_constant<bool, (   is_same<typename _is_iterator<Iter>::category, random_access_iterator_tag>::value )> {};
 
 
     // Reverse Iterator 
 
     template <typename Iter>
-    class reverse_iterator : iterator < typename iterator_traits<Iter>::iterator_category,
+    class reverse_iterator : public iterator < typename iterator_traits<Iter>::iterator_category,
                                         typename iterator_traits<Iter>::value_type,
                                         typename iterator_traits<Iter>::difference_type,
                                         typename iterator_traits<Iter>::pointer,
@@ -199,15 +199,15 @@ namespace ft
 
             reference               operator*() const {Iter tmp = current; return *--tmp;}
             pointer                 operator->() const {return &(operator*());}
-            reverse_iterator&       operator++() const {--current; return (*this);}
-            reverse_iterator        operator++(int) const {reverse_iterator tmp(*this); --current; return (tmp);}
-            reverse_iterator&       operator--() const {++current; return (*this);}
-            reverse_iterator        operator--(int) const {reverse_iterator tmp(*this); ++current; return (tmp);}
+            reverse_iterator&       operator++() {--current; return (*this);}
+            reverse_iterator        operator++(int) {reverse_iterator tmp(*this); --current; return (tmp);}
+            reverse_iterator&       operator--()  {++current; return (*this);}
+            reverse_iterator        operator--(int) {reverse_iterator tmp(*this); ++current; return (tmp);}
             reverse_iterator        operator+(difference_type n) const{ return reverse_iterator(current - n);}
             reverse_iterator        operator-(difference_type n) const{ return reverse_iterator(current + n);}
-            reverse_iterator&       operator+=(difference_type n) const{ current -= n; return (*this);}
-            reverse_iterator&       operator-=(difference_type n) const{ current += n; return (*this);}
-            reference               operator[](differnce_type n) const {return *(*this + _n);}
+            reverse_iterator&       operator+=(difference_type n) { current -= n; return (*this);}
+            reverse_iterator&       operator-=(difference_type n) { current += n; return (*this);}
+            reference               operator[](difference_type n) const {return *(*this + n);}
     };
 
     // Non Member Function overloads for Reverse Iterators 
