@@ -2,6 +2,7 @@
 # define VECTOR_HPP
 
 #include "iterator.hpp"
+#include "algorithm.hpp"
 
 #include <memory>
 #include <cstddef>
@@ -250,7 +251,7 @@ namespace ft
 
 			// Capacity 
 			size_type			        size() const {return ft::distance(this->_begin, this->_end);}
-			size_type			        max_size() const { return std::min(static_cast<size_type>(std::numeric_limits<difference_type>::max()), this->_a.max_size());}
+			size_type			        max_size() const { return ft::min(static_cast<size_type>(std::numeric_limits<difference_type>::max()), this->_a.max_size());}
 			void 				        resize(size_type n, value_type val = value_type());
 			size_type 			        capacity() const {return this->__capacity();}
 			bool 				        empty() const {return this->_begin == this->_end;}
@@ -578,11 +579,11 @@ namespace ft
 		// Comparison Operators 
 
 		template<typename T, typename Allocator>
-		inline bool operator==(const vector<T, Allocator>&lhs, const vector<T, Allocator>& rhs){return (lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin()));}
+		inline bool operator==(const vector<T, Allocator>&lhs, const vector<T, Allocator>& rhs){return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));}
 		template<typename T, typename Allocator>
 		inline bool operator!=(const vector<T, Allocator>&lhs, const vector<T, Allocator>& rhs){return !(lhs == rhs);}
 		template<typename T, typename Allocator>
-		inline bool operator<(const vector<T, Allocator>&lhs, const vector<T, Allocator>& rhs){return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));}
+		inline bool operator<(const vector<T, Allocator>&lhs, const vector<T, Allocator>& rhs){return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));}
 		template<typename T, typename Allocator>
 		inline bool operator<=(const vector<T, Allocator>&lhs, const vector<T, Allocator>& rhs){return !(lhs > rhs);}
 		template<typename T, typename Allocator>
