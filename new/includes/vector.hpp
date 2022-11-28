@@ -294,13 +294,13 @@ namespace ft
 		vector<T, Allocator>::vector(const allocator_type& alloc) : vector_base<T, Allocator>(size_type(), alloc) {}
 
 		template<typename T, typename Allocator>
-		vector<T, Allocator>::vector(size_type n) : vector_base<T, Allocator>(n, allocator_type()) { std::uninitialized_fill(this->_begin, this->_begin + n, value_type()); this->_end += n;}
+		vector<T, Allocator>::vector(size_type n) : vector_base<T, Allocator>(n, allocator_type()) { ft::uninitialized_fill(this->_begin, this->_begin + n, value_type(), allocator_type()); this->_end += n;}
 
 		template<typename T, typename Allocator>
-		vector<T, Allocator>::vector(size_type n, const value_type& val) : vector_base<T, Allocator>(n, allocator_type()) {std::uninitialized_fill(this->_begin, this->_begin + n, val); this->_end += n;}
+		vector<T, Allocator>::vector(size_type n, const value_type& val) : vector_base<T, Allocator>(n, allocator_type()) {ft::uninitialized_fill(this->_begin, this->_begin + n, val, allocator_type()); this->_end += n;}
 
 		template<typename T, typename Allocator>
-		vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& alloc) : vector_base<T, Allocator>(n, alloc) {std::uninitialized_fill(this->_begin, this->_begin + n, val); this->_end += n;}
+		vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& alloc) : vector_base<T, Allocator>(n, alloc) {ft::uninitialized_fill(this->_begin, this->_begin + n, val, allocator_type()); this->_end += n;}
 
 
         template <typename T, typename Allocator>
@@ -311,14 +311,14 @@ namespace ft
         template <typename T, typename Allocator>
         template <typename ForwardIterator>
         vector<T, Allocator>::vector(ForwardIterator first, typename enable_if<_is_forward_iterator<ForwardIterator>::value, ForwardIterator>::type last, const allocator_type& alloc) : vector_base<T, Allocator>(static_cast<size_type>(ft::distance(first, last)), alloc)
-        { this->_end = std::uninitialized_copy(first, last, this->_begin);}
+        { this->_end = ft::uninitialized_copy(first, last, this->_begin, allocator_type());}
 
 		// Copy Constructor and Assignment 
 		template<typename T, typename Allocator>
 		vector<T, Allocator>::vector(const vector<T, Allocator>& other) : vector_base<T, Allocator>(other.capacity())
 		{
 			clear();
-			this->_end = std::uninitialized_copy(other._begin, other._end, this->_begin);
+			this->_end = ft::uninitialized_copy(other._begin, other._end, this->_begin, allocator_type());
 		}
 
 		template<typename T, typename Allocator>
@@ -356,7 +356,7 @@ namespace ft
 		void 	vector<T, Allocator>::reallocate(size_type n)
 		{
 			vector<T, Allocator> tmp(n);
-			std::uninitialized_copy(this->_begin, this->_end, tmp._begin);
+			ft::uninitialized_copy(this->_begin, this->_end, tmp._begin, allocator_type());
 			tmp._end = tmp._begin + size();
 			this->swap_data(tmp);
 		}
@@ -405,7 +405,7 @@ namespace ft
 			if (n < capacity())
 			{
 				clear();
-				std::uninitialized_fill(this->_begin, this->_begin + n, val);
+				ft::uninitialized_fill(this->_begin, this->_begin + n, val, allocator_type());
 				this->_end += n;
 			}
 			else 
@@ -432,7 +432,7 @@ namespace ft
             if (new_n < capacity())
             {
                 clear();
-                this->_end = std::uninitialized_copy(first, last, this->_begin);
+                this->_end = ft::uninitialized_copy(first, last, this->_begin, allocator_type());
             }
             else 
             {
@@ -497,7 +497,7 @@ namespace ft
 				this->_a.construct(_old_end + n, *(_old_end));
 				this->_a.destroy(_old_end);
 			}
-			std::uninitialized_fill(_p, _p + n, val);
+			ft::uninitialized_fill(_p, _p + n, val, allocator_type());
 			this->_end += n;
 		}
 
@@ -533,7 +533,7 @@ namespace ft
                 this->_a.construct(_old_end + _in_size, *(_old_end));
                 this->_a.destroy(_old_end);
             }
-            std::uninitialized_copy(first, last, _p);
+            ft::uninitialized_copy(first, last, _p, allocator_type());
             this->_end += _in_size;
         }
 
@@ -544,7 +544,7 @@ namespace ft
 			pointer _p = this->_begin + _diff;
 
 			this->_a.destroy(_p);
-			this->_a.destroy(std::uninitialized_copy(_p + 1, this->_end--, _p));
+			this->_a.destroy(ft::uninitialized_copy(_p + 1, this->_end--, _p, allocator_type()));
 			return (iterator(this->_begin + _diff));
 		}
 

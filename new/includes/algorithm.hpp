@@ -58,6 +58,24 @@ namespace ft
     template <typename T>
     const T& min(const T& x, const T& y) {return ((x < y) ? x : y);}
 
+    template <typename ForwardIter, class T, typename Allocator>
+    void uninitialized_fill(ForwardIter f, ForwardIter l, const T& x, Allocator alloc)
+    {
+        for (; f != l; ++f)
+        {
+            alloc.construct(f, x);
+        }
+    }
+
+    template <typename InputIter, typename ForwardIter, typename Allocator>
+    ForwardIter uninitialized_copy(InputIter f, InputIter l, ForwardIter x, Allocator alloc)
+    {
+        for (; f != l; ++f, ++x)
+        {
+            alloc.construct(&*x, *f);
+        }
+        return x;
+    }
 }
 
 #endif
