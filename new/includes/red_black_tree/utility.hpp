@@ -16,10 +16,10 @@ namespace ft
 
             pair(void) : first(), second() {}
             pair(const first_t &a, const second_t &b) : first(a), second(b) {}
-            ~pair(){}
+            ~pair(void){}
 
-            template <typename U, typename V>
-            pair(const pair<U,V>& rhs) : first(rhs.first), second(rhs.second) {}
+            template <typename V, typename U>
+            pair(const pair<U, V>& rhs) : first(rhs.first), second(rhs.second) {}
 
             pair const& operator=(pair const &rhs)
             {

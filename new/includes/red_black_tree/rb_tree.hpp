@@ -47,7 +47,7 @@ namespace ft
         _red_black_tree& operator=(_red_black_tree const &rhs) 
         {
             __size = rhs.__size;
-            __tree = rhs.__tree;
+            __tree = rhs->__tree;
             return (*this);
         }
 
@@ -85,13 +85,13 @@ namespace ft
             return (parent->right_child);
         }
 
-        // Using swap instead of replacing nodes ; clear can be used on the subtree that way
-        void    swap(node *nodeA, node *nodeB)
+        // Using _swap instead of replacing nodes ; clear can be used on the subtree that way
+        void    _swap(node *nodeA, node *nodeB)
         {
             pointer     tmp;
 
             if (RBT_DEBUG)
-                std::cout << nodeB->data->first << " swapped with " << nodeA->data->first << "\n"; 
+                std::cout << nodeB->data->first << " __swapped with " << nodeA->data->first << std::endl; 
             tmp = nodeA->data;
             nodeA->data = nodeB->data; 
             nodeB->data = tmp;
@@ -133,7 +133,7 @@ namespace ft
             bool    tmp;
 
             if (RBT_DEBUG)
-                std::cout << "DB2: Sibling Red case \n";
+                std::cout << "DB2: Sibling Red case " << std::endl;
             tmp = parent->color;   // Swap parent and sibling colors
             parent->color = sibling->color;
             sibling->color = tmp;
@@ -151,9 +151,9 @@ namespace ft
 
             if (RBT_DEBUG)
             {
-                std::cout << "node :" << tree_node->data->first << "\n";
-                std::cout << "parent :" << parent->data->first << "\n";
-                std::cout << "sibling :" << sibling->data->first << "\n";
+                std::cout << "node :" << tree_node->data->first << std::endl;
+                std::cout << "parent :" << parent->data->first << std::endl;
+                std::cout << "sibling :" << sibling->data->first << std::endl;
             }
 
             if (parent->right_child == sibling && !get_right_child_color(sibling))
@@ -198,9 +198,9 @@ namespace ft
                 std::cout << "Double black is " << tree_node->data->first << ", ";
                 std::cout << "Sibling is " << sibling->data->first << ", ";
                 if (!sibling->color)
-                    std::cout << "RED \n";
+                    std::cout << "RED" << std::endl;
                 else  
-                    std::cout << "BLACK \n";
+                    std::cout << "BLACK " << std::endl;
             }
             // has a sibling and all the sibling & childern are black 
             if (sibling && has_all_black_children(sibling))
@@ -242,7 +242,7 @@ namespace ft
             if (!has_children(tree_node) && !tree_node->color)
             {
                 if (RBT_DEBUG)
-                    std::cout << "Address " << tree_node << ", key " << tree_node->data->first << "was deleted \n";
+                    std::cout << "Address " << tree_node << ", key " << tree_node->data->first << "was deleted " << std::endl;
                 _clear(tree_node);
                 return ;
             }
@@ -258,7 +258,7 @@ namespace ft
                     tmp = _get_successor(tree_node->right_child);
                 else if (tree_node->left_child)
                     tmp = _get_predecessor(tree_node->left_child);
-                swap(tmp, tree_node);
+                _swap(tmp, tree_node);
                 _delete(tmp);
                 return ;
             }
@@ -396,9 +396,11 @@ namespace ft
 
         void    _rotate_left(node *tree_node)
         {
-            node    *root = tree_node->parent->parent;
-            node    *tmp = tree_node->left_child;
+            node    *root ;
+            node    *tmp ;
 
+            root = tree_node->parent->parent;
+            tmp = tree_node->left_child;
             tree_node->parent->parent = tree_node;
             if (root == NULL) 
                 __tree = tree_node;
@@ -430,7 +432,7 @@ namespace ft
             if (!has_children(in_node))
             {
                 if (RBT_DEBUG)
-                    std::cout << "Leaf found, deleting: " << in_node << "\n";
+                    std::cout << "Leaf found, deleting: " << in_node << std::endl;
                 if (in_node->parent && in_node->parent->right_child == in_node)
                     in_node->parent->right_child = NULL;
                 else if (in_node->parent && in_node->parent->left_child == in_node)
@@ -440,9 +442,9 @@ namespace ft
                 __node_alloc.deallocate(in_node, 1);
             }
             else if (RBT_DEBUG)
-                std::cout << in_node << ">> " << in_node->left_child << " -- "  << in_node->right_child << "\n";
+                std::cout << in_node << ">> " << in_node->left_child << " -- "  << in_node->right_child << std::endl << std::endl;
             if (RBT_DEBUG)
-                std::cout << in_node << " :: " << __tree << "\n";
+                std::cout << in_node << " :: " << __tree << std::endl;
             if (in_node == __tree)
                 __tree = NULL;
             __size--;
@@ -480,7 +482,7 @@ namespace ft
             {
                 __tree = _add_new_child(val, NULL);
                 if (RBT_DEBUG)
-                    std::cout << "\n Inserted " << val.first << "\n";
+                    std::cout << std::endl << "\n Inserted " << val.first << std::endl;
                 return ;
             }
             if (find(val.first))
@@ -500,7 +502,7 @@ namespace ft
                     runner = runner->right_child;
             }
             if (RBT_DEBUG)
-                std::cout << "\n Inserted " << val.first << "\n";
+                std::cout << std::endl << " Inserted " << val.first << std::endl;
             if ((val.first) < (parent->data->first))
             {
                 parent->left_child = _add_new_child(val, parent);
@@ -556,7 +558,7 @@ namespace ft
                 if (!n)
                 {
                     if (RBT_DEBUG)
-                        std::cout << "Error: key not found\n";
+                        std::cout << "Error: key not found" << std::endl;
                     return ;
                 }
                 _delete(n);
