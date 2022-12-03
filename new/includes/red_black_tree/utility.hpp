@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UTILITY_H
+# define UTILITY_H
 
 namespace ft
 {
@@ -18,7 +19,7 @@ namespace ft
             pair(const first_t &a, const second_t &b) : first(a), second(b) {}
             ~pair(void){}
 
-            template <typename V, typename U>
+            template <typename U, typename V>
             pair(const pair<U, V>& rhs) : first(rhs.first), second(rhs.second) {}
 
             pair const& operator=(pair const &rhs)
@@ -34,3 +35,5 @@ namespace ft
     { return (pair<T1, T2>(x, y));}
 
 }
+
+#endif 

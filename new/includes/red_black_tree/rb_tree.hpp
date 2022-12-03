@@ -450,28 +450,28 @@ namespace ft
             __size--;
         }
 
-        node*   find_key(key_type const &key, node* tree_node) const
-        {
-            node    *back = NULL;
+        node	*_findKey(key_type const & key, node *nd) const
+		{
+			node	*bck = NULL;
 
-            if (__tree == NULL)
-                return (NULL);
-            if (tree_node == NULL)
-                tree_node = __tree;
-            if (tree_node->data->first == key)
-                return (tree_node);
-            if (!has_children(tree_node))
-                return (NULL);
-            if (tree_node->data->first > key && tree_node->left_child == NULL)
-                return (NULL);
-            else if (tree_node->data->first > key && tree_node->left_child)
-                back = find_key(key, tree_node->left_child);
-            if (tree_node->data->first < key && tree_node->right_child == NULL)
-                return (NULL);
-            else if (tree_node->data->first < key && tree_node->right_child)
-                back = find_key(key, tree_node->right_child);
-            return (back);
-        }
+			if (__tree == NULL)
+				return (NULL);
+			if (nd == NULL)
+				nd = __tree;
+			if (nd->data->first == key)
+				return (nd);
+			if (!has_children(nd))
+				return (NULL);
+			if (nd->data->first > key && nd->left_child == NULL)
+				return (NULL);
+			else if (nd->data->first > key && nd->left_child)
+				bck = _findKey(key, nd->left_child);
+			if (nd->data->first < key && nd->right_child == NULL)
+				return (NULL);
+			else if (nd->data->first < key && nd->right_child)
+				bck = _findKey(key, nd->right_child);
+			return (bck);
+		}
 
         void    _insert(value_type const& val)
         {
@@ -528,14 +528,14 @@ namespace ft
             void        clear(void) const {_clear();}
             bool        find(key_type const& key) const
             {
-                if (find_key(key, NULL))
+                if (_findKey(key, NULL))
                     return true;
                 return false;
             }
 
             value_ptr   get_value(key_type const& key) const
             {
-                node *n = find_key(key, NULL);
+                node *n = _findKey(key, NULL);
 
                 if (!n)
                     return (NULL);
@@ -544,7 +544,7 @@ namespace ft
 
             void    set_value(key_type const &key, mapped_type const &data)
             {
-                node *n = find_key(key, NULL);
+                node *n = _findKey(key, NULL);
 
                 if (!n)
                     insert(key, data);
@@ -553,7 +553,7 @@ namespace ft
 
             void    erase(key_type const & key)
             {
-                node *n = find_key(key, NULL);
+                node *n = _findKey(key, NULL);
 
                 if (!n)
                 {
