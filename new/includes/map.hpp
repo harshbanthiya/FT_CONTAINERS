@@ -1,6 +1,8 @@
-#pragma once
+#ifndef MAP_HPP
+#define MAP_HPP
+
 #include "iostream"
-#include "rb_tree.hpp"
+#include "RBtree.hpp"
 #include <map>
 
 #define FT_NOEXCEPT throw()
@@ -77,3 +79,5 @@ namespace ft
     } ;
 
 }
+
+#endif
