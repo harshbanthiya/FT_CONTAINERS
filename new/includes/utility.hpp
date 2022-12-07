@@ -22,10 +22,10 @@ class pair
 	pair(const first_type & a, const second_type & b): first(a),  second(b) {}
 	~pair(void) {}
 
-	template <typename V, typename U> 
+	template <typename U, typename V> 
 	pair (const pair<U, V>& pr): first(pr.first), second(pr.second) {}
 
-	pair const &	operator=(pair const & right)
+	pair&	operator=(pair const & right)
 	{
 		first = right.first;
 		second = right.second;
@@ -34,6 +34,36 @@ class pair
 	}
 };
 
+template <class T1, class T2>
+bool operator==(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
+  return lhs.first == rhs.first && lhs.second == rhs.second;
+}
+
+template <class T1, class T2>
+bool operator!=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
+  return !(lhs == rhs);
+}
+
+template <class T1, class T2>
+bool operator<(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
+  return lhs.first < rhs.first ||
+         (!(rhs.first < lhs.first) && lhs.second < rhs.second);
+}
+
+template <class T1, class T2>
+bool operator>(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
+  return rhs < lhs;
+}
+
+template <class T1, class T2>
+bool operator>=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
+  return !(lhs < rhs);
+}
+
+template <class T1, class T2>
+bool operator<=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
+  return !(rhs < lhs);
+}
 
 //function template to return a pair object with two different types
 //making it inline to improve code execution time
@@ -43,6 +73,29 @@ inline pair<T1, T2> make_pair(T1 x, T2 y)
 {
 	return (pair<T1, T2>(x, y));
 }
+
+// Swap and select first 
+template <typename T>
+void swap(T &x, T& y)
+{
+	T tmp(x);
+	x = y;
+	y = tmp;
+}
+
+template <typename pair>
+struct select_first
+{
+	typename pair::first_type &operator()(pair &x) const {return x.first;}
+	const typename pair::first_type &operator()(const pair &x) const {return x.first;}
+};
+
+template <typename T>
+struct identity
+{
+	T &operator()(T &x) const {return x;} 
+	const T &operator() (const T &x) const {return x;}
+};
 
 } //end namespace
 
