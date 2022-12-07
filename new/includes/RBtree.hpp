@@ -23,10 +23,10 @@ namespace ft
 		Node 	*left_child;
 	};
 
-template <typename Key, typename T, typename Alloc = std::allocator<ft::pair<const Key, T > > >
-class	RBtree 
-{
-	private:
+	template <typename Key, typename T, typename Alloc = std::allocator<ft::pair<const Key, T > > >
+	class	RBtree 
+	{
+		private:
 		
 		struct	node
 		{
@@ -660,7 +660,7 @@ class	RBtree
 			}
 			std::cout << "\033[0m";
 		}
-};
+	};
 
 } //end namespace
 

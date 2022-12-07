@@ -9,7 +9,24 @@
 namespace ft
 {
     enum tree_node_color {RED = false, BLACK = true};
-    
+
+    // Declarations to use algo in cpp file 
+    struct tree_node_base;
+    tree_node_base* tree_increment(tree_node_base *x) FT_NOEXCEPT;
+    const tree_node_base* tree_increment(const tree_node_base *x)FT_NOEXCEPT ;
+    tree_node_base* tree_decrement(tree_node_base *x)FT_NOEXCEPT;
+    const tree_node_base* tree_decrement(const tree_node_base *x)FT_NOEXCEPT;
+    void    tree_rotate_left(tree_node_base* const x, tree_node_base *& root)FT_NOEXCEPT;
+    void    tree_rotate_right(tree_node_base * const x, tree_node_base *&root)FT_NOEXCEPT;
+    void   tree_insert_and_fixup(const bool insert_left, tree_node_base *x,
+                                    tree_node_base *p, tree_node_base &header)FT_NOEXCEPT;
+    tree_node_base *tree_erase_and_fixup(tree_node_base *const z,
+                                        tree_node_base &header)FT_NOEXCEPT;
+    tree_node_base*     _minimum(tree_node_base *x)FT_NOEXCEPT;
+    const tree_node_base* _minimum(const tree_node_base *x)FT_NOEXCEPT;
+    tree_node_base*     _maximum(tree_node_base *x)FT_NOEXCEPT;
+    const tree_node_base* _maximum(const tree_node_base *x)FT_NOEXCEPT;
+
     struct tree_node_base
     {
         typedef tree_node_base          *base_ptr;
