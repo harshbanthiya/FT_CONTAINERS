@@ -2,9 +2,11 @@
 #define TREE_HPP
 
 #include <memory>
-#include "../algorithm.hpp"
-#include "../iterator.hpp"
+#include "algorithm.hpp"
+#include "iterator.hpp"
 #include "utility.hpp"
+
+#define FT_NOEXCEPT throw()
 
 namespace ft
 {
@@ -13,19 +15,19 @@ namespace ft
     // Declarations to use algo in cpp file 
     struct tree_node_base;
     tree_node_base* tree_increment(tree_node_base *x) FT_NOEXCEPT;
-    const tree_node_base* tree_increment(const tree_node_base *x)FT_NOEXCEPT ;
-    tree_node_base* tree_decrement(tree_node_base *x)FT_NOEXCEPT;
-    const tree_node_base* tree_decrement(const tree_node_base *x)FT_NOEXCEPT;
-    void    tree_rotate_left(tree_node_base* const x, tree_node_base *& root)FT_NOEXCEPT;
-    void    tree_rotate_right(tree_node_base * const x, tree_node_base *&root)FT_NOEXCEPT;
+    const tree_node_base* tree_increment(const tree_node_base *x) FT_NOEXCEPT ;
+    tree_node_base* tree_decrement(tree_node_base *x) FT_NOEXCEPT;
+    const tree_node_base* tree_decrement(const tree_node_base *x) FT_NOEXCEPT;
+    void    tree_rotate_left(tree_node_base* const x, tree_node_base *& root);
+    void    tree_rotate_right(tree_node_base * const x, tree_node_base *&root);
     void   tree_insert_and_fixup(const bool insert_left, tree_node_base *x,
-                                    tree_node_base *p, tree_node_base &header)FT_NOEXCEPT;
+                                    tree_node_base *p, tree_node_base &header) FT_NOEXCEPT;
     tree_node_base *tree_erase_and_fixup(tree_node_base *const z,
-                                        tree_node_base &header)FT_NOEXCEPT;
-    tree_node_base*     _minimum(tree_node_base *x)FT_NOEXCEPT;
-    const tree_node_base* _minimum(const tree_node_base *x)FT_NOEXCEPT;
-    tree_node_base*     _maximum(tree_node_base *x)FT_NOEXCEPT;
-    const tree_node_base* _maximum(const tree_node_base *x)FT_NOEXCEPT;
+                                        tree_node_base &header) FT_NOEXCEPT;
+    tree_node_base*     _minimum(tree_node_base *x) FT_NOEXCEPT;
+    const tree_node_base* _minimum(const tree_node_base *x) FT_NOEXCEPT;
+    tree_node_base*     _maximum(tree_node_base *x) FT_NOEXCEPT;
+    const tree_node_base* _maximum(const tree_node_base *x) FT_NOEXCEPT;
 
     struct tree_node_base
     {
@@ -61,7 +63,7 @@ namespace ft
     template <typename value>
     struct tree_node : public tree_node_base
     {
-        typedef tree_node<value>    *link_type;
+        typedef tree_node<value>    *_Link_type;
 
         value                       value_field;
         value                       *value_ptr() {return &value_field;}
@@ -80,7 +82,7 @@ namespace ft
 
         typedef tree_iterator<T>                iterator_type;
         typedef tree_node_base::base_ptr        Base_ptr;
-        typedef tree_node<T>*                   Link_type;
+        typedef tree_node<T>*                   _Link_type;
 
         Base_ptr                                node;
 
@@ -88,8 +90,8 @@ namespace ft
         tree_iterator(const tree_iterator &other) : node(other.node) {}
         explicit  tree_iterator(Base_ptr x) : node(x) {}
 
-        reference operator*() const FT_NOEXCEPT {return *static_cast<Link_type>(node)->value_ptr();}
-        pointer   operator->() const FT_NOEXCEPT {return static_cast<Link_type>(node)->value_ptr();}
+        reference operator*() const FT_NOEXCEPT {return *static_cast<_Link_type>(node)->value_ptr();}
+        pointer   operator->() const FT_NOEXCEPT {return static_cast<_Link_type>(node)->value_ptr();}
 
         iterator_type &operator++() FT_NOEXCEPT {node = tree_increment(node); return *this;}
         iterator_type operator++(int) FT_NOEXCEPT   {iterator_type tmp(*this); ++(*this); return tmp;}
@@ -116,17 +118,18 @@ namespace ft
         typedef tree_iterator<T>                iterator;
         typedef tree_const_iterator<T>          const_iterator_type;
         typedef tree_node_base::const_base_ptr  Base_ptr;
-        typedef const tree_node<T>*             Link_type;
+        typedef const tree_node<T>*             _Link_type;
 
         Base_ptr                                node;
 
-        tree_const_iterator() : node() {}
+        tree_const_iterator() FT_NOEXCEPT: node() {}
+        explicit  tree_const_iterator(Base_ptr x) FT_NOEXCEPT : node(x) {}
         tree_const_iterator(const tree_const_iterator &other) : node(other.node) {}
-        explicit  tree_const_iterator(Base_ptr x) : node(x) {}
+        tree_const_iterator(iterator it) : node(it.node) {}
 
         iterator remove_const() const FT_NOEXCEPT {return iterator(const_cast<typename iterator::Base_ptr>(node));}
-        reference operator*() const FT_NOEXCEPT {return *static_cast<Link_type>(node)->value_ptr();}
-        pointer   operator->() const FT_NOEXCEPT {return static_cast<Link_type>(node)->value_ptr();}
+        reference operator*() const FT_NOEXCEPT {return *static_cast<_Link_type>(node)->value_ptr();}
+        pointer   operator->() const FT_NOEXCEPT {return static_cast<_Link_type>(node)->value_ptr();}
 
         const_iterator_type &operator++() FT_NOEXCEPT {node = tree_increment(node); return *this;}
         const_iterator_type operator++(int) FT_NOEXCEPT   {const_iterator_type tmp(*this); ++(*this); return tmp;}
@@ -141,7 +144,7 @@ namespace ft
     };
 
     // Red Black Tree Class with key, value, key of value functor, Comparing function and allocator
-    template <typename Key, typename Value, typename KeyOfVal, typename Compare = std::less<Key>, typename Alloc = std::allocator<Value> >
+    template <typename Key, typename Value, typename KeyofVal, typename Compare = std::less<Key>, typename Alloc = std::allocator<Value> >
     class rb_tree
     {
         private :
@@ -215,7 +218,7 @@ namespace ft
 
         // Get Specific Nodes returning base node pointer type 
         _Base_ptr&  _root() {return this->impl.header.parent;}
-        _Const_Base_ptr root() const {return this->impl.header.parent;}
+        _Const_Base_ptr _root() const {return this->impl.header.parent;}
 
         _Base_ptr&  _leftmost() {return this->impl.header.left_child;}
         _Const_Base_ptr  _leftmost() const {return this->impl.header.left_child;}
@@ -233,7 +236,7 @@ namespace ft
         static _Const_Base_ptr _S_maximum(_Const_Base_ptr x) {return _maximum(x);}
 
         // Return Key Type
-        static const Key &_S_key(_Const_Link_type x) {return KeyOfVal()(*x->value_ptr());}
+        static const Key &_S_key(_Const_Link_type x) {return KeyofVal()(*x->value_ptr());}
         static const Key &_S_key(_Const_Base_ptr x) {return _S_key(static_cast<_Const_Link_type>(x));}
 
         // Return Node Types 
@@ -278,7 +281,7 @@ namespace ft
         public :
 
         rb_tree() {}
-        rb_tree(const Compare &cmp, const allocator_type &a = allocator_type()) : impl(cmp, _Node_allocator(_a)) {}
+        rb_tree(const Compare &cmp, const allocator_type &a = allocator_type()) : impl(cmp, _Node_allocator(a)) {}
         rb_tree(const rb_tree &other) : impl(other.impl) {if (other._root() != NULL) _root() = _copy_tree(other);}
         ~rb_tree() {_erase_without_balancing(_begin());}
         rb_tree &operator=(const rb_tree &other)
@@ -309,6 +312,7 @@ namespace ft
         // Capacity 
         bool empty() const {return impl.node_count == 0;}
         size_type max_size() const {return ft::min(_get_Node_allocator().max_size(), static_cast<size_type>(std::numeric_limits<difference_type>::max()));}
+        size_type size() const {return impl.node_count;}
 
         // Modifiers 
         void erase(iterator position) {_erase_helper(position);}
@@ -323,7 +327,7 @@ namespace ft
         template <typename InputIter>
         void insert_range(InputIter first, InputIter last)
         {
-            for(; first != last; ++ first)
+            for(; first != last; ++first)
                 insert_unique_with_hint(end(), *first);
         }
 
@@ -465,17 +469,18 @@ namespace ft
         bool    insert_left = (x != 0 || p == _end() || impl.key_cmp(KeyofVal()(v), _S_key(p)));
         _Link_type z = this->_create_node(v);
         tree_insert_and_fixup(insert_left, z, p, this->impl.header);
-        ++impl.node_count++;
+        ++impl.node_count;
         return iterator(z);
     }
 
     template <typename Key, typename Val, typename KeyofVal, typename Compare, typename Alloc>
-    ft::pair <typename rb_tree<Key, Val, KeyofVal, Compare, Alloc>::iterator, bool>
+    ft::pair<typename rb_tree<Key, Val, KeyofVal, Compare, Alloc>::iterator, 
+    bool>
     rb_tree<Key, Val, KeyofVal, Compare, Alloc>::insert_unique(const value_type& v)
     {
         typedef ft::pair<iterator, bool> ret_pair;
 
-        ft::pair<_Base_ptr, _Base_ptr> ret = _get_insert_unique_position(KeyOfVal()(v)); // get position based key of v
+        ft::pair<_Base_ptr, _Base_ptr> ret = _get_insert_unique_position(KeyofVal()(v)); // get position based key of v
         if (ret.second)
             return ret_pair(_insert_helper(ret.first, ret.second, v), true);
         return ret_pair(iterator(ret.first), false);
@@ -485,14 +490,14 @@ namespace ft
     typename rb_tree<Key, Val, KeyofVal, Compare, Alloc>::iterator
     rb_tree<Key, Val, KeyofVal, Compare, Alloc>::insert_unique_with_hint(const_iterator position, const value_type& v)
     {
-        ft::pair<_Base_ptr, _Base_ptr> ret = _get_insert_hint_unique_position(position, KeyOfVal()(v));
+        ft::pair<_Base_ptr, _Base_ptr> ret = _get_insert_hint_unique_position(position, KeyofVal()(v));
         if (ret.second)
             return _insert_helper(ret.first, ret.second, v);
         return iterator(ret.first);
     }
 
     // Copy tree including the header of the tree 
-    // x is root of new tree, p first, end() and than parent of x
+    // x is root of new tree, p first, end() and then parent of x
     // return tree
     template <typename Key, typename Val, typename KeyofVal, typename Compare, typename Alloc>
     typename rb_tree<Key, Val, KeyofVal, Compare, Alloc>::_Link_type

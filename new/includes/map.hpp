@@ -4,7 +4,7 @@
 #include <functional>
 #include "algorithm.hpp"
 #include "utility.hpp"
-#include "red_black_tree/rb_tree.hpp"
+#include "rb_tree.hpp"
 
 
 #define FT_NOEXCEPT throw()
@@ -13,7 +13,7 @@ namespace ft
 {
     template <typename Key, typename T, 
             typename Compare = std::less<Key>,
-            class Allocator = std::allocator<std::pair<const Key, T> > >
+            typename Allocator = std::allocator<ft::pair<const Key, T> > >
     class map
     {
         public:
@@ -22,7 +22,7 @@ namespace ft
             typedef T                                           mapped_type;
             typedef Compare                                     key_compare;
             typedef Allocator                                   allocator_type;
-            typedef std::pair<const key_type, mapped_type>      value_type;
+            typedef ft::pair<const key_type, mapped_type>       value_type;
 
         private :
 
@@ -32,18 +32,16 @@ namespace ft
             typedef typename allocator_type::const_reference    const_reference;
             typedef typename allocator_type::pointer            pointer;
             typedef typename allocator_type::const_pointer      const_pointer;
-            typedef typename allocator_type::size_type          size_type;
-            typedef typename allocator_type::difference_type    difference_type;
 
             typedef typename _base::iterator                    iterator;
             typedef typename _base::const_iterator              const_iterator;
             typedef typename _base::reverse_iterator            reverse_iterator;
             typedef typename _base::const_reverse_iterator      const_reverse_iterator;
-            typedef typename _base::differnce_type              difference_type;
+            typedef typename _base::difference_type             difference_type;
             typedef typename _base::size_type                   size_type;
 
 
-        class value_compare : public binary_function < value_type, value_type, bool>
+        class value_compare : public std::binary_function < value_type, value_type, bool>
         {
             friend class map<Key, T, Compare, Allocator>;
             protected: 
@@ -52,7 +50,7 @@ namespace ft
 
             public:
                 bool operator() (const value_type& x, const value_type& y) const 
-                {return (comp(x.first, y.first);)}
+                {return (comp(x.first, y.first));}
         };
     
         private :
@@ -66,7 +64,7 @@ namespace ft
         template <typename InputIter>
         map(InputIter first, InputIter last, const key_compare& cmp = key_compare(), const allocator_type& alloc = allocator_type()) : tree(cmp, alloc) {tree.insert_range(first, last);}
 
-        map(const map& other) : tree(other.treee) {}
+        map(const map& other) : tree(other.tree) {}
 
         map& operator=(const map& other)
         {
@@ -123,10 +121,12 @@ namespace ft
         {
             return tree.insert_unique(val);
         }
+
         iterator insert(iterator position, const value_type& val)
         {
             return tree.insert_unique_with_hint(position, val);
         }
+
         template <typename InputIter>
         void insert(InputIter first, InputIter last)
         {
@@ -137,7 +137,7 @@ namespace ft
         size_type erase(const key_type& k) {return tree.erase(k);}
         void erase(iterator first, iterator last) {tree.erase(first, last);}
         void swap(map &other) {tree.swap(other.tree);}
-        void clear() {tree.clear()};
+        void clear() {tree.clear();}
 
           // observers
         key_compare key_comp() const { return tree.key_comp(); }
