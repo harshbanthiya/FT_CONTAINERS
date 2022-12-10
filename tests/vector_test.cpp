@@ -23,7 +23,7 @@ void stl_method_test() {
   {
     std::cout << "swap()\n";
     std::vector<int> x(10, 10);
-    std::vector<int>().swap(x);  // ??????????? 이런걸 왜하지?
+    std::vector<int>().swap(x); 
     std::cout << "x capacity and size : " << x.capacity() << "," << x.size()
               << "\n";
   }

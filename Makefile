@@ -6,27 +6,28 @@
 #    By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/28 10:52:34 by hbanthiy          #+#    #+#              #
-#    Updated: 2022/12/07 15:51:44 by hbanthiy         ###   ########.fr        #
+#    Updated: 2022/12/10 15:23:46 by hbanthiy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX						= c++
 
 ifdef DEBUG
-	CXXFLAGS = --std=c++98 -g3 -fsanitize=address
+CXXFLAGS = --std=c++98 -g3 -fsanitize=address
 else ifdef LEAKS
-	CXXFLAGS = --std=c++98 -g
+CXXFLAGS = --std=c++98 -g
 else ifdef TEST
-	CXXFLAGS = -g --std=c++98  #-fsanitize=address
+CXXFLAGS = -g --std=c++98  #-fsanitize=address
 else
-	CXXFLAGS	= --std=c++98 -Wall -Wextra -Werror
+CXXFLAGS	= --std=c++98
 endif
 
-ifdef TEST
-	NAME			=		mine.out
+ifdef	TEST
+NAME			=		mine.out
 else
-	NAME			=		containers #Name of program
+NAME			=		containers #Name of program
 endif
+
 
 INC_DIR		= ./includes/
 
@@ -34,14 +35,12 @@ SRCS_DIR	= ./src/
 
 TEST_DIR	= ./tests/
 
-SRCS			= $(addprefix $(SRCS_DIR), \
-						rb_tree.cpp \
-				)
+SRCS			= $(addprefix $(SRCS_DIR), rb_tree.cpp )
 
 ifdef TEST
-	SRCS += $(addprefix $(TEST_DIR), $(TEST).cpp)
+SRCS += $(addprefix $(TEST_DIR), $(TEST).cpp)
 else
-	SRCS += $(addprefix $(SRCS_DIR), main.cpp)
+SRCS += $(addprefix $(SRCS_DIR), vector_test.cpp)
 endif
 
 OBJS			= ${SRCS:%.cpp=%.o}
