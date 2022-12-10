@@ -28,6 +28,8 @@ namespace ft
 
             typedef rb_tree<key_type, value_type, ft::select_first<value_type>, key_compare, allocator_type> _base;
 
+        public :
+        
             typedef typename allocator_type::reference          reference;
             typedef typename allocator_type::const_reference    const_reference;
             typedef typename allocator_type::pointer            pointer;

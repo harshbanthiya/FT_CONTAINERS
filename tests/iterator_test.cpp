@@ -10,11 +10,11 @@
 
 template <typename tag>
 struct my {
-  static const bool input = ft::__is_input_iterator<tag>::value;
-  static const bool output = ft::__is_output_iterator<tag>::value;
-  static const bool fwd = ft::__is_forward_iterator<tag>::value;
-  static const bool bidi = ft::__is_bidirectional_iterator<tag>::value;
-  static const bool rd = ft::__is_random_access_iterator<tag>::value;
+  static const bool input = ft::_is_input_iterator<tag>::value;
+  static const bool output = ft::_is_output_iterator<tag>::value;
+  static const bool fwd = ft::_is_forward_iterator<tag>::value;
+  static const bool bidi = ft::_is_bidirectional_iterator<tag>::value;
+  static const bool rd = ft::_is_random_access_iterator<tag>::value;
 };
 
 template <typename tag>
@@ -54,7 +54,7 @@ void check_iterator_category() {
   my<ft::iterator<ft::random_access_iterator_tag, int> > my_rd_tag;
   lib<std::iterator<std::random_access_iterator_tag, int> > lib_rd_tag;
 
-  bool test = ft::__is_input_iterator<
+  bool test = ft::_is_input_iterator<
       ft::iterator<std::input_iterator_tag, int> >::value;
   // ft::__is_iterator<
   //     ft::iterator<std::input_iterator_tag, int> >::iterator_category a;
@@ -122,7 +122,7 @@ void iterable_test() {
   // std::__has_iterator_category<
   //     ft::iterator<ft::input_iterator_tag, float> >::value;
   ft::iterator<std::input_iterator_tag, float> ft_f_it;
-  std::cout << ft::__has_iterator_typedefs<
+  std::cout << ft::_has_iterator_typedefs<
                    ft::iterator<std::input_iterator_tag, float> >::value
             << "\n";
   // std::__has_iterator_typedefs<
@@ -158,8 +158,8 @@ int main() {
     //           << typeid(f).name() << ", \n";
   }
   __test<ft::vector<int>::iterator>(0, 0, 0, 0, 0);
-  __test<ft::__tree_const_iterator<int> >(0, 0, 0, 0, 0);
-  __test<ft::iterator_traits<ft::__tree_const_iterator<int> > >(0, 0, 0, 0, 0);
+  __test<ft::tree_const_iterator<int> >(0, 0, 0, 0, 0);
+  __test<ft::iterator_traits<ft::tree_const_iterator<int> > >(0, 0, 0, 0, 0);
   int arr[5] = {1, 2, 5, 4, 3};
   ft::pair<int, int> b[5];
   std::pair<int, int> c[5];
