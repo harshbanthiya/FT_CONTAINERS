@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rb_tree.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/12 13:41:02 by hbanthiy          #+#    #+#             */
+/*   Updated: 2022/12/12 14:02:36 by hbanthiy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rb_tree.hpp"
 #include "utility.hpp"
 
@@ -132,14 +144,16 @@ namespace ft
         x->color = RED;
 
         if (insert_left)
-            p->left_child = x;
-        if (p == &header)
         {
-            header.parent = x;
-            header.right_child = x;
+            p->left_child = x;
+            if (p == &header)
+            {
+                header.parent = x;
+                header.right_child = x;
+            }
+            else if (p == header.left_child)
+                header.left_child = x;
         }
-        else if (p == header.left_child)
-            header.left_child = x;
         else 
         {
             p->right_child = x;
@@ -205,7 +219,7 @@ namespace ft
     void    tree_insert_and_fixup(const bool insert_left, tree_node_base *x,
                                     tree_node_base *p, tree_node_base &header) FT_NOEXCEPT
     {
-        tree_node_base  *& root = header.parent;
+        tree_node_base  *&root = header.parent;
         local_insert_new_node(insert_left, x, p, header);
         local_insert_fixup(x, root);
     }
@@ -215,9 +229,9 @@ namespace ft
                                     tree_node_base *&x, tree_node_base *& xp,
                                     tree_node_base &header)
     {
-        tree_node_base *& root = header.parent;
-        tree_node_base *& leftmost = header.left_child;
-        tree_node_base *& rightmost = header.right_child;
+        tree_node_base *&root = header.parent;
+        tree_node_base *&leftmost = header.left_child;
+        tree_node_base *&rightmost = header.right_child;
 
         if (y->left_child != NULL && y->right_child != NULL)
         {
@@ -244,7 +258,7 @@ namespace ft
             else 
                 z->parent->right_child = y;
             y->parent = z->parent;
-            std::swap(y->color, z->color);
+            ft::swap(y->color, z->color);
             y = z;
             return ;
         }
