@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rb_tree.hpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/12 12:19:12 by hbanthiy          #+#    #+#             */
+/*   Updated: 2022/12/12 13:13:29 by hbanthiy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TREE_HPP
 #define TREE_HPP
 
@@ -14,6 +26,7 @@ namespace ft
 
     // Declarations to use algo in cpp file 
     struct tree_node_base;
+    
     tree_node_base* tree_increment(tree_node_base *x) FT_NOEXCEPT;
     const tree_node_base* tree_increment(const tree_node_base *x) FT_NOEXCEPT ;
     tree_node_base* tree_decrement(tree_node_base *x) FT_NOEXCEPT;
@@ -81,14 +94,14 @@ namespace ft
         typedef ptrdiff_t                       difference_type; 
 
         typedef tree_iterator<T>                iterator_type;
-        typedef tree_node_base::base_ptr        Base_ptr;
+        typedef tree_node_base::base_ptr        _Base_ptr;
         typedef tree_node<T>*                   _Link_type;
 
-        Base_ptr                                node;
+        _Base_ptr                                node;
 
         tree_iterator() : node() {}
         tree_iterator(const tree_iterator &other) : node(other.node) {}
-        explicit  tree_iterator(Base_ptr x) : node(x) {}
+        explicit  tree_iterator(_Base_ptr x) : node(x) {}
 
         reference operator*() const FT_NOEXCEPT {return *static_cast<_Link_type>(node)->value_ptr();}
         pointer   operator->() const FT_NOEXCEPT {return static_cast<_Link_type>(node)->value_ptr();}
@@ -110,24 +123,24 @@ namespace ft
     struct tree_const_iterator : public iterator<bidirectional_iterator_tag, T>
     {
         typedef T                               value_type;
-        typedef const T&                        reference; 
         typedef const T*                        pointer;
+        typedef const T&                        reference; 
         typedef bidirectional_iterator_tag      iterator_category;
         typedef ptrdiff_t                       difference_type; 
 
         typedef tree_iterator<T>                iterator;
         typedef tree_const_iterator<T>          const_iterator_type;
-        typedef tree_node_base::const_base_ptr  Base_ptr;
+        typedef tree_node_base::const_base_ptr  _Base_ptr;
         typedef const tree_node<T>*             _Link_type;
 
-        Base_ptr                                node;
+        _Base_ptr                                node;
 
         tree_const_iterator() FT_NOEXCEPT: node() {}
-        explicit  tree_const_iterator(Base_ptr x) FT_NOEXCEPT : node(x) {}
+        explicit  tree_const_iterator(_Base_ptr x) FT_NOEXCEPT : node(x) {}
         tree_const_iterator(const tree_const_iterator &other) : node(other.node) {}
         tree_const_iterator(iterator it) : node(it.node) {}
 
-        iterator remove_const() const FT_NOEXCEPT {return iterator(const_cast<typename iterator::Base_ptr>(node));}
+        iterator remove_const() const FT_NOEXCEPT {return iterator(const_cast<typename iterator::_Base_ptr>(node));}
         reference operator*() const FT_NOEXCEPT {return *static_cast<_Link_type>(node)->value_ptr();}
         pointer   operator->() const FT_NOEXCEPT {return static_cast<_Link_type>(node)->value_ptr();}
 
