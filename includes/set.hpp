@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/12 13:17:51 by hbanthiy          #+#    #+#             */
+/*   Updated: 2022/12/12 13:25:49 by hbanthiy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SET_HPP
 #define SET_HPP
 
@@ -27,9 +39,9 @@ namespace ft
         typedef rb_tree<Key, Key, ft::identity<Key>, key_compare, allocator_type> _base;
 
         public :
-        typedef typename _base::iterator                    iterator;
+        typedef typename _base::const_iterator              iterator;
         typedef typename _base::const_iterator              const_iterator;
-        typedef typename _base::reverse_iterator            reverse_iterator;
+        typedef typename _base::const_reverse_iterator      reverse_iterator;
         typedef typename _base::const_reverse_iterator      const_reverse_iterator;
         typedef typename _base::difference_type             difference_type;
         typedef typename _base::size_type                   size_type;
@@ -136,11 +148,11 @@ namespace ft
 
     template <typename T, typename Compare, typename Alloc>
     bool operator<=(const ft::set<T, Compare, Alloc> &lhs, const ft::set<T, Compare, Alloc> &rhs)
-    { return !(rhs > lhs);}
+    { return !(rhs < lhs);}
 
     template <typename T, typename Compare, typename Alloc>
     bool operator>=(const ft::set<T, Compare, Alloc> &lhs, const ft::set<T, Compare, Alloc> &rhs)
-    { return !(rhs < lhs);}
+    { return !(lhs < rhs);}
 
     template <typename T, typename Compare, typename Alloc>
     void swap(ft::set<T, Compare, Alloc> &lhs, ft::set<T, Compare, Alloc> &rhs)

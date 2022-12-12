@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   algorithm.hpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/12 11:35:18 by hbanthiy          #+#    #+#             */
+/*   Updated: 2022/12/12 11:38:41 by hbanthiy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ALGORITHM_HPP
 #define ALGORITHM_HPP
 
@@ -16,7 +28,7 @@ namespace ft
     }
 
     template <typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
-    bool equal(InputIterator1 first1, InputIterator2 last1, InputIterator2 first2, BinaryPredicate pred)
+    bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, BinaryPredicate pred)
     {
         while (first1 != last1)
         {
@@ -57,25 +69,6 @@ namespace ft
 
     template <typename T>
     const T& min(const T& x, const T& y) {return ((x < y) ? x : y);}
-
-    template <typename ForwardIter, class T, typename Allocator>
-    void uninitialized_fill(ForwardIter f, ForwardIter l, const T& x, Allocator alloc)
-    {
-        for (; f != l; ++f)
-        {
-            alloc.construct(f, x);
-        }
-    }
-
-    template <typename InputIter, typename ForwardIter, typename Allocator>
-    ForwardIter uninitialized_copy(InputIter f, InputIter l, ForwardIter x, Allocator alloc)
-    {
-        for (; f != l; ++f, ++x)
-        {
-            alloc.construct(&*x, *f);
-        }
-        return x;
-    }
 }
 
 #endif

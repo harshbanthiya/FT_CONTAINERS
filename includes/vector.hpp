@@ -128,7 +128,7 @@ namespace ft
 			// Constructor 
 			vector_iter() FT_NOEXCEPT {}
             template <typename U> // copy only when category is random_access
-            vector_iter(const vector_iter<U>& _u, typename enable_if<_is_random_access_iterator<U>::value>::type * = 0) FT_NOEXCEPT : it(_u.base()) {}
+            vector_iter(const vector_iter<U>& _u, typename enable_if<_is_random_access_iterator<U>::value>::type* = 0) FT_NOEXCEPT : it(_u.base()) {}
 			vector_iter(iterator_type x) FT_NOEXCEPT : it(x) {}
 
 			const iterator_type& base() const {return it;}
@@ -261,8 +261,8 @@ namespace ft
 			// Element Access 
 			reference			        operator[](size_type n) {return reference(*(this->_begin + n));}
 			const_reference		        operator[](size_type n) const {return const_reference(*(this->_begin + n));}
-			reference 			        at(size_type n) {if (n > this->size()) this->throw_out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
-			const_reference 	        at(size_type n) const {if (n > this->size()) this->throw_out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
+			reference 			        at(size_type n) {if (n > this->size()) std::out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
+			const_reference 	        at(size_type n) const {if (n > this->size()) std::out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
 			reference 			        front() { return *this->_begin;}
 			const_reference 	        front() const { return *this->_begin;}
 			reference 			        back() { return *(this->_end - 1);}
@@ -276,7 +276,7 @@ namespace ft
 			reverse_iterator		    rbegin() {return reverse_iterator(end());}
 			const_reverse_iterator		rbegin() const {return reverse_iterator(end());}
 			reverse_iterator		    rend() {return reverse_iterator(begin());}
-			const_reverse_iterator		rend() const {return reverse_iterator(begin());}
+			const_reverse_iterator		rend() const {return const_reverse_iterator(begin());}
 
 		private: 
 
@@ -294,13 +294,13 @@ namespace ft
 		vector<T, Allocator>::vector(const allocator_type& alloc) : vector_base<T, Allocator>(size_type(), alloc) {}
 
 		template<typename T, typename Allocator>
-		vector<T, Allocator>::vector(size_type n) : vector_base<T, Allocator>(n, allocator_type()) { ft::uninitialized_fill(this->_begin, this->_begin + n, value_type(), allocator_type()); this->_end += n;}
+		vector<T, Allocator>::vector(size_type n) : vector_base<T, Allocator>(n, allocator_type()) { std::uninitialized_fill(this->_begin, this->_begin + n, value_type()); this->_end += n;}
 
 		template<typename T, typename Allocator>
-		vector<T, Allocator>::vector(size_type n, const value_type& val) : vector_base<T, Allocator>(n, allocator_type()) {ft::uninitialized_fill(this->_begin, this->_begin + n, val, allocator_type()); this->_end += n;}
+		vector<T, Allocator>::vector(size_type n, const value_type& val) : vector_base<T, Allocator>(n, allocator_type()) {std::uninitialized_fill(this->_begin, this->_begin + n, val); this->_end += n;}
 
 		template<typename T, typename Allocator>
-		vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& alloc) : vector_base<T, Allocator>(n, alloc) {ft::uninitialized_fill(this->_begin, this->_begin + n, val, allocator_type()); this->_end += n;}
+		vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& alloc) : vector_base<T, Allocator>(n, alloc) {std::uninitialized_fill(this->_begin, this->_begin + n, val); this->_end += n;}
 
 
         template <typename T, typename Allocator>
@@ -311,14 +311,14 @@ namespace ft
         template <typename T, typename Allocator>
         template <typename ForwardIterator>
         vector<T, Allocator>::vector(ForwardIterator first, typename enable_if<_is_forward_iterator<ForwardIterator>::value, ForwardIterator>::type last, const allocator_type& alloc) : vector_base<T, Allocator>(static_cast<size_type>(ft::distance(first, last)), alloc)
-        { this->_end = ft::uninitialized_copy(first, last, this->_begin, allocator_type());}
+        { this->_end = std::uninitialized_copy(first, last, this->_begin);}
 
 		// Copy Constructor and Assignment 
 		template<typename T, typename Allocator>
 		vector<T, Allocator>::vector(const vector<T, Allocator>& other) : vector_base<T, Allocator>(other.capacity())
 		{
 			clear();
-			this->_end = ft::uninitialized_copy(other._begin, other._end, this->_begin, allocator_type());
+			this->_end = std::uninitialized_copy(other._begin, other._end, this->_begin);
 		}
 
 		template<typename T, typename Allocator>
@@ -356,7 +356,7 @@ namespace ft
 		void 	vector<T, Allocator>::reallocate(size_type n)
 		{
 			vector<T, Allocator> tmp(n);
-			ft::uninitialized_copy(this->_begin, this->_end, tmp._begin, allocator_type());
+			std::uninitialized_copy(this->_begin, this->_end, tmp._begin);
 			tmp._end = tmp._begin + size();
 			this->swap_data(tmp);
 		}
@@ -405,7 +405,7 @@ namespace ft
 			if (n < capacity())
 			{
 				clear();
-				ft::uninitialized_fill(this->_begin, this->_begin + n, val, allocator_type());
+				std::uninitialized_fill(this->_begin, this->_begin + n, val);
 				this->_end += n;
 			}
 			else 
@@ -432,7 +432,7 @@ namespace ft
             if (new_n < capacity())
             {
                 clear();
-                this->_end = ft::uninitialized_copy(first, last, this->_begin, allocator_type());
+                this->_end = std::uninitialized_copy(first, last, this->_begin);
             }
             else 
             {
@@ -497,7 +497,7 @@ namespace ft
 				this->_a.construct(_old_end + n, *(_old_end));
 				this->_a.destroy(_old_end);
 			}
-			ft::uninitialized_fill(_p, _p + n, val, allocator_type());
+			std::uninitialized_fill(_p, _p + n, val);
 			this->_end += n;
 		}
 
@@ -506,8 +506,8 @@ namespace ft
         void vector<T, Allocator>::insert(iterator position, InputIterator first, typename enable_if<_is_input_iterator<InputIterator>::value && !_is_forward_iterator<InputIterator>::value, InputIterator>::type last)
         {
             difference_type _diff = position - begin();
-            pointer _p = this->_being + _diff;
-            pointer _old_end = this->_end;
+            //pointer _p = this->_begin + _diff;
+            //pointer _old_end = this->_end;
 
             for (int i = 0; first != last; ++first, ++i)
                 insert(position + i, *first);
@@ -533,7 +533,7 @@ namespace ft
                 this->_a.construct(_old_end + _in_size, *(_old_end));
                 this->_a.destroy(_old_end);
             }
-            ft::uninitialized_copy(first, last, _p, allocator_type());
+            std::uninitialized_copy(first, last, _p);
             this->_end += _in_size;
         }
 
@@ -544,7 +544,7 @@ namespace ft
 			pointer _p = this->_begin + _diff;
 
 			this->_a.destroy(_p);
-			this->_a.destroy(ft::uninitialized_copy(_p + 1, this->_end--, _p, allocator_type()));
+			this->_a.destroy(std::uninitialized_copy(_p + 1, this->_end--, _p));
 			return (iterator(this->_begin + _diff));
 		}
 

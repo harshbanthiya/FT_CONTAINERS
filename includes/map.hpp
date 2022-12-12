@@ -1,13 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/12 12:04:45 by hbanthiy          #+#    #+#             */
+/*   Updated: 2022/12/12 12:12:31 by hbanthiy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAP_HPP
 #define MAP_HPP
 
 #include <functional>
-#include "algorithm.hpp"
-#include "utility.hpp"
 #include "rb_tree.hpp"
-
-
-#define FT_NOEXCEPT throw()
+#include "algorithm.hpp"
+#include "iterator.hpp"
+#include "utility.hpp"
 
 namespace ft
 {
@@ -28,6 +38,8 @@ namespace ft
 
             typedef rb_tree<key_type, value_type, ft::select_first<value_type>, key_compare, allocator_type> _base;
 
+        public :
+        
             typedef typename allocator_type::reference          reference;
             typedef typename allocator_type::const_reference    const_reference;
             typedef typename allocator_type::pointer            pointer;
@@ -81,10 +93,11 @@ namespace ft
         const_iterator    begin() const FT_NOEXCEPT {return const_iterator(tree.begin());}
         iterator    end() FT_NOEXCEPT {return iterator(tree.end());}
         const_iterator    end() const FT_NOEXCEPT {return const_iterator(tree.end());}
-        reverse_iterator    rbegin() FT_NOEXCEPT {return iterator(tree.rbegin());}
-        const_reverse_iterator    rbegin() const FT_NOEXCEPT {return const_iterator(tree.rbegin());}
-        reverse_iterator    rend() FT_NOEXCEPT {return iterator(tree.rend());}
-        const_reverse_iterator    rend() const FT_NOEXCEPT {return const_iterator(tree.rend());}
+
+        reverse_iterator    rbegin() FT_NOEXCEPT {return tree.rbegin();}
+        const_reverse_iterator    rbegin() const FT_NOEXCEPT {return tree.rbegin();}
+        reverse_iterator    rend() FT_NOEXCEPT {return tree.rend();}
+        const_reverse_iterator    rend() const FT_NOEXCEPT {return tree.rend();}
 
         // Capacity
         bool empty() const FT_NOEXCEPT {return tree.empty();}

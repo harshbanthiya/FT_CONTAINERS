@@ -6,15 +6,15 @@
 #define B "\033[32m";
 #define RESET "\033[0m"
 
-typedef ft::__tree<
+typedef ft::rb_tree<
     int, ft::pair<int, std::string>,
     ft::select_first<ft::pair<int, std::string> >, std::less<int>,
     std::allocator<ft::pair<int, std::string> > >::iterator iterator;
-typedef ft::__tree<int, ft::pair<int, std::string>,
+typedef ft::rb_tree<int, ft::pair<int, std::string>,
                    ft::select_first<ft::pair<int, std::string> >,
                    std::less<int>, std::allocator<ft::pair<int, std::string> > >
     my_tree;
-typedef ft::__tree<int, int, ft::identity<int>, std::less<int>,
+typedef ft::rb_tree<int, int, ft::identity<int>, std::less<int>,
                    std::allocator<int> >
     int_tree;
 
@@ -22,26 +22,26 @@ int_tree tree_int;
 
 template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare,
           typename _Alloc>
-void ft::__tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::print_tree() {
-  print_tree("", __begin(), false);
+void ft::rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::print_tree() {
+  print_tree("", _begin(), false);
 }
 
 template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare,
           typename _Alloc>
-void ft::__tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::print_tree(
+void ft::rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::print_tree(
     const std::string &prefix, _Link_type x, bool isLeft) {
   if (x != NULL) {
     std::cout << prefix;
     std::cout << (isLeft ? "L├──" : "R└──");
-    if (x->__color_ == RED) {
-      std::cout << R std::cout << __S_key(x) << RESET << "\n";
+    if (x->color == RED) {
+      std::cout << R std::cout << _S_key(x) << RESET << "\n";
     } else {
-      std::cout << B std::cout << __S_key(x) << RESET << "\n";
+      std::cout << B std::cout << _S_key(x) << RESET << "\n";
     }
     print_tree(prefix + (isLeft ? " │   " : "     "),
-               static_cast<_Link_type>(x->__left_), true);
+               static_cast<_Link_type>(x->left_child), true);
     print_tree(prefix + (isLeft ? " │   " : "     "),
-               static_cast<_Link_type>(x->__right_), false);
+               static_cast<_Link_type>(x->right_child), false);
   }
 }
 
@@ -121,19 +121,19 @@ void tree_test(int argc, char **argv) {
     if (it != tree.end()) std::cout << (*it).first << ":" << it->second << "\n";
   }
   {
-    ft::__tree_node_base *basis = new ft::__tree_node_base[10];
+    ft::tree_node_base *basis = new ft::tree_node_base[10];
     for (int i = 0; i < 10; i++) {
       if (i & 1)
-        basis[i].__color_ = ft::BLACK;
+        basis[i].color = ft::BLACK;
       else
-        basis[i].__color_ = ft::RED;
+        basis[i].color = ft::RED;
       // std::cout << basis[i].__color_ << "\n";
     }
     delete[] basis;
   }
   {
-    ft::__tree_node<int> *test = new ft::__tree_node<int>();
-    int *val_ptr = test->__valptr();
+    ft::tree_node<int> *test = new ft::tree_node<int>();
+    int *val_ptr = test->value_ptr();
     *val_ptr = 42;
     // std::cout << &test.__value_field << "\n";
     // std::cout << test->__valptr() << "\n";
@@ -243,12 +243,14 @@ int main(int argc, char **argv) {
   // int_tree tree_int;
   tree_int.insert_range(numbers.begin(), numbers.end());
   tree_int.print_tree();
+  /*
   for (int j = 0; j < 5; ++j) {
     int i = generateRandomNumber(0, GEN_NUM - 1);
     std::cout << "to erase: " << numbers[i] << "\n";
     tree_int.erase(numbers[i]);
     tree_int.print_tree();
   }
+  */
   // tree_int.print_tree();
   // tree_int.print_tree();
 

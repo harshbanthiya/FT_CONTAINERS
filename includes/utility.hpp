@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utility.hpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/12 13:36:48 by hbanthiy          #+#    #+#             */
+/*   Updated: 2022/12/12 13:40:15 by hbanthiy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #ifndef UTILITY_HPP
 # define UTILITY_HPP
@@ -14,15 +26,15 @@ namespace ft
 		typedef	T1	first_type;
 		typedef	T2	second_type;
 
-		first_type	first;
-		second_type	second;
+		T1	first;
+		T2	second;
 
 		pair(): first(), second() {}
-		template <typename U, typename V> 
-		pair (const pair<U, V>& pr): first(pr.first), second(pr.second) {}
+		template <typename U1, typename U2> 
+		pair (const pair<U1, U2> &pr): first(pr.first), second(pr.second) {}
 		pair(const T1 &a, const T2 &b): first(a),  second(b) {}
 
-		pair&	operator=(pair const & right)
+		pair&	operator=(pair const &right)
 		{
 			first = right.first;
 			second = right.second;
