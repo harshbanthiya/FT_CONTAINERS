@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/13 13:21:50 by hbanthiy          #+#    #+#             */
+/*   Updated: 2022/12/13 16:40:49 by hbanthiy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
@@ -5,8 +17,6 @@
 #include "algorithm.hpp"
 
 #include <memory>
-#include <cstddef>
-#include <utility>
 
 #define FT_NOEXCEPT throw()
 
@@ -15,7 +25,7 @@ namespace ft
 
     // Vector base class
 	template<typename _T, class _Allocator = std::allocator<_T>()>
-	class vector_base
+	struct vector_base
 	{
 		public:
 			typedef _Allocator								    allocator_type;
@@ -147,7 +157,7 @@ namespace ft
 			vector_iter& operator+=(difference_type n) {it += n; return (*this);}
 			vector_iter operator+(difference_type n) const {vector_iter tmp(*this); tmp += n; return (tmp);}
 			vector_iter& operator-=(difference_type n) {it -= n; return (*this);}
-			vector_iter operator-(difference_type n) const {vector_iter tmp(*this); tmp -=n; return (tmp);}
+			vector_iter operator-(difference_type n) const {vector_iter tmp(*this); tmp -= n; return (tmp);}
 			
 			reference 	operator[](difference_type n) const FT_NOEXCEPT {return it[n];}
 
@@ -170,7 +180,7 @@ namespace ft
 	template<typename Iter1, typename Iter2>
 	bool operator<=(const vector_iter<Iter1>& x, const vector_iter<Iter2>& y)  {return x.base() <= y.base();}
 	template<typename Iter1, typename Iter2>
-	bool operator>=(const vector_iter<Iter1>& x, const vector_iter<Iter2>& y)  {return x.base() <= y.base();}
+	bool operator>=(const vector_iter<Iter1>& x, const vector_iter<Iter2>& y)  {return x.base() >= y.base();}
 
 	template<typename Iter1, typename Iter2>
 	typename vector_iter<Iter1>::difference_type operator-(const vector_iter<Iter1>& x, const vector_iter<Iter2>& y) {return (x.base() - y.base());}
@@ -261,8 +271,8 @@ namespace ft
 			// Element Access 
 			reference			        operator[](size_type n) {return reference(*(this->_begin + n));}
 			const_reference		        operator[](size_type n) const {return const_reference(*(this->_begin + n));}
-			reference 			        at(size_type n) {if (n > this->size()) std::out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
-			const_reference 	        at(size_type n) const {if (n > this->size()) std::out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
+			reference 			        at(size_type n) {if (n > this->size()) this->throw_out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
+			const_reference 	        at(size_type n) const {if (n > this->size()) this->throw_out_of_range("Vector: Out of Range"); return *(this->_begin + n);}
 			reference 			        front() { return *this->_begin;}
 			const_reference 	        front() const { return *this->_begin;}
 			reference 			        back() { return *(this->_end - 1);}
@@ -274,7 +284,7 @@ namespace ft
 			iterator 			        end() {return this->_end;}
 			const_iterator		        end() const {return this->_end;}
 			reverse_iterator		    rbegin() {return reverse_iterator(end());}
-			const_reverse_iterator		rbegin() const {return reverse_iterator(end());}
+			const_reverse_iterator		rbegin() const {return const_reverse_iterator(end());}
 			reverse_iterator		    rend() {return reverse_iterator(begin());}
 			const_reverse_iterator		rend() const {return const_reverse_iterator(begin());}
 
@@ -505,7 +515,7 @@ namespace ft
         template <typename InputIterator>
         void vector<T, Allocator>::insert(iterator position, InputIterator first, typename enable_if<_is_input_iterator<InputIterator>::value && !_is_forward_iterator<InputIterator>::value, InputIterator>::type last)
         {
-            difference_type _diff = position - begin();
+            //difference_type _diff = position - begin();
             //pointer _p = this->_begin + _diff;
             //pointer _old_end = this->_end;
 

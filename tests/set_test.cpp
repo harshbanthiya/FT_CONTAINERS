@@ -56,11 +56,11 @@ void set_test(int argc, char **argv) {
   std::cout << my_set.size() << ", " << my_set.max_size() << "\n";
   std::cout << my_set.max_size() << ", " << std_set.max_size() << "\n";
   std::cout << sizeof(my_set) << "," << sizeof(std_set) << "\n";
-  std::cout << sizeof(ft::__tree<int, int, ft::select_first<int> >) << "\n";
+  std::cout << sizeof(ft::rb_tree<int, int, ft::select_first<int> >) << "\n";
   std::cout << sizeof(std::__tree<int, std::less<int>, std::allocator<int> >)
             << "\n";
-  ft::__tree_key_compare<std::less<int> > key_cmp;
-  std::cout << "key comp : " << sizeof(key_cmp.__key_comp) << "\n";
+  ft::tree_key_compare<std::less<int> > key_cmp;
+  std::cout << "key comp : " << sizeof(key_cmp.key_cmp) << "\n";
 }
 
 int main(int argc, char **argv) {
