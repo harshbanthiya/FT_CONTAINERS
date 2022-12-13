@@ -6,7 +6,7 @@
 /*   By: hbanthiy <hbanthiy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 13:21:50 by hbanthiy          #+#    #+#             */
-/*   Updated: 2022/12/13 14:04:11 by hbanthiy         ###   ########.fr       */
+/*   Updated: 2022/12/13 16:40:49 by hbanthiy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,7 +261,7 @@ namespace ft
 
 			// Capacity 
 			size_type			        size() const {return ft::distance(this->_begin, this->_end);}
-			size_type			        max_size() const { return std::min(static_cast<size_type>(std::numeric_limits<difference_type>::max()), this->_a.max_size());}
+			size_type			        max_size() const { return ft::min(static_cast<size_type>(std::numeric_limits<difference_type>::max()), this->_a.max_size());}
 			void 				        resize(size_type n, value_type val = value_type());
 			size_type 			        capacity() const {return this->__capacity();}
 			bool 				        empty() const {return this->_begin == this->_end;}
