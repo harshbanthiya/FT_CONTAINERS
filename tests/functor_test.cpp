@@ -30,5 +30,5 @@ int main() {
   std::pair<int, std::string> pr(1, "abc");
   std::cout << "[" << pr.first << "] [" << pr.second << "]\n";
   std::cout << select_first<std::pair<int, std::string> >()(pr) << "\n";
-  // std::cout << select_first<int>()(pr) << "\n";
+ // std::cout << select_first<int>()(pr) << "\n";
 }

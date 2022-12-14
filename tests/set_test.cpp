@@ -75,5 +75,5 @@ int main(int argc, char **argv) {
   std::cout << sizeof(std::__compressed_pair<int, double>) << "\n";
   std::cout << sizeof(ft::pair<int, double>) << "\n";
   std::cout << sizeof(std::pair<int, double>) << "\n";
-  system("leaks mine.out");
+  system("leaks set.out");
 }

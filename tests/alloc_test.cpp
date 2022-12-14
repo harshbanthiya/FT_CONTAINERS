@@ -6,14 +6,14 @@ void allocTest(std::allocator<int> myAlloc, int **arr) {
   myAlloc.construct(*arr + 1, 1);
   myAlloc.construct(*arr + 2, 1);
   myAlloc.destroy(*arr);
-  // for (int i = 0; i < 2; i++) std::cout << sizeof(*arr[i]) << ",";
-  // for (int i = 0; i < 2; i++) std::cout << *arr[i] << ",";
+  //for (int i = 0; i < 2; i++) std::cout << sizeof(*arr[i]) << ",";
+  //for (int i = 0; i < 2; i++) std::cout << *arr[i] << ",";
 }
 
 void test_init_is_heap() {
-  // int *val = NULL;
-  // my::uninitialized_fill(val, val + 7, 42);
-  // return val;
+   //int *val = NULL;
+   //my::uninitialized_fill(val, val + 7, 42);
+   //return val;
   int b = 42;
   int c = b;
   int *val = ::new (static_cast<void *>(&c)) int(b);
@@ -59,23 +59,23 @@ void rebind_test() {
 }
 
 int main() {
-  rebind_test();
+  //rebind_test();
   std::allocator<int> myAlloc;
   int *arr = myAlloc.allocate(14);
   myAlloc.construct(arr, 424242);
   my_destroy(*arr);
   std::cout << *arr << "\n";
   allocTest(myAlloc, &arr);
-  // std::vector<int> a(42, 10, myAlloc);
-  // std::cout << sizeof(a);
+  std::vector<int> a(42, 10, myAlloc);
+  std::cout << sizeof(a);
   myAlloc.deallocate(arr, 1);
   std::cout << "\n";
 
-  // int *aa;
+  //int *aa;
   // new (static_cast<void *>(aa)) int;
 
-  // std::cout << *aa;
-  // delete aa;
+  //std::cout << *aa;
+ // delete aa;
   {
     int arr[10];
     std::uninitialized_fill(&arr[0], &arr[10], 42);
@@ -92,10 +92,10 @@ int main() {
     }
   }
 
-  // int *val = test_init_is_heap();
-  // for (int *tmp = val; tmp < val + 10; tmp++) {
-  //   std::cout << *tmp << ",";
-  // }
-  // myAlloc.deallocate(val, 1);
-  system("leaks mine.out");
+  //int *val = test_init_is_heap();
+  //for (int *tmp = val; tmp < val + 10; tmp++) {
+     //std::cout << *tmp << ",";
+   //}
+   //myAlloc.deallocate(val, 1);
+  system("leaks alloc.out");
 }
