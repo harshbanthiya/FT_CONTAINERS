@@ -39,5 +39,11 @@ tree:
 type_traits:
 	@$(COMPILER) $(FLAGS)	 -I$(INC_DIR) $(SRCS) type_traits.cpp -o type_traits.out 
 
+testtest:
+	@$(COMPILER) $(FLAGS)	 -I$(INC_DIR) $(SRCS) testtest.cpp -o testtest.out 
+
+throwtest:
+	@$(COMPILER) $(FLAGS)	 -I$(INC_DIR) $(SRCS) throw_test.cpp -o throwtest.out 
+
 clean:
-	rm -f vector.out map.out stack.out set.out
+	rm -f vector.out map.out stack.out set.out alloc.out functor.out iterator.out pair.out raii.out tree.out type_traits.out testtest.out throwtest.out

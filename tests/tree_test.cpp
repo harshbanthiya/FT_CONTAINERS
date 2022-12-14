@@ -234,15 +234,15 @@ void benchmark_static() {
 
 #define GEN_NUM 100
 int main(int argc, char **argv) {
-  // tree_test(argc, argv);
-  // alloc_test();
-  // benchmark_static();
+  tree_test(argc, argv);
+  alloc_test();
+  benchmark_static();
   ft::vector<int> numbers;
-  for (int i = 0; i < GEN_NUM; ++i)
-    numbers.push_back(generateRandomNumber(std::make_pair(0, GEN_NUM * 3)));
+ // for (int i = 0; i < GEN_NUM; ++i)
+  //  numbers.push_back(generateRandomNumber(std::make_pair(0, GEN_NUM * 3)));
   // int_tree tree_int;
-  tree_int.insert_range(numbers.begin(), numbers.end());
-  tree_int.print_tree();
+  //tree_int.insert_range(numbers.begin(), numbers.end());
+ // tree_int.print_tree();
   /*
   for (int j = 0; j < 5; ++j) {
     int i = generateRandomNumber(0, GEN_NUM - 1);
@@ -258,5 +258,5 @@ int main(int argc, char **argv) {
   // int c = static_test().increment();
   //
   // std::string leak = std::string("leaks ") + std::string(argv[0]);
-  // system("leaks mine.out 1>/dev/null");
+  system("leaks tree.out");
 }

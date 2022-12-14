@@ -60,5 +60,5 @@ int main() {
   } catch (std::exception &e) {
     std::cout << e.what() << " in Main raii_child_test CATCH\n";
   }
-  system("leaks mine.out | grep leaked");
+  system("leaks raii.out | grep leaked");
 }
