@@ -1,15 +1,15 @@
-  <h3 align="left">Minishell</h3>
+  <h3 align="left">FT_CONTAINERS</h3>
 
   <p align="left">
     <a href="https://github.com/harshbanthiya/Minishell">
-    <img src="https://badge42.vercel.app/api/v2/cl2xrmmu4000609mlo05k9qg8/project/2371023" alt="Minishell">
+    <img src="https://badge42.vercel.app/api/v2/cl2xrmmu4000609mlo05k9qg8/project/2371023" alt="ft_containers">
     </a>
  </p>
   
-   ``Executable Name`` | ./minishell 
+   ``Executable Name`` | ./mine.out 
    :--------------- | :---------------
-   ``Program Purpose`` | Making a small reimplementation of BASH with certain limitations
-   ``Program Language`` | C |
+   ``Program Purpose`` | Making a small reimplementation of STL containers vector, map, stack and set
+   ``Program Language`` | C++ |
    ``Allowed External Library`` | readline 
    ``Allowed Functions & System Calls`` | printf, malloc, free, write, access, open, read, close, fork, wait, waitpid, wait3, wait4, signal, sigaction, sigemptyset, sigaddset, kill, exit,getcwd, chdir, stat, lstat, fstat, unlink, execve,dup, dup2, pipe, opendir, readdir, closedir, strerror, perror, isatty, ttyname, ttyslot, ioctl, getenv, tcsetattr, tcgetattr, tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
    ``Tested Primarily on`` | MacOs    
