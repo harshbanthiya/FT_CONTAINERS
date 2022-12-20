@@ -28,7 +28,7 @@
 ```sh
 make TEST=(name of test file in tests folder without the .cpp extension)
 make TEST=vector_test (tests/vector_test.cpp)
-make TEST_tree_test (tests/tree_test.cpp)
+make TEST=tree_test (tests/tree_test.cpp)
 ```
 
 
