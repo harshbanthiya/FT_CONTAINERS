@@ -2,7 +2,7 @@
 
   <p align="left">
     <a href="https://github.com/harshbanthiya/FT_CONTAINERS">
-    [![hbanthiy's 42 ft_containers Score](https://badge42.vercel.app/api/v2/cl2xrmmu4000609mlo05k9qg8/project/2798787)](https://github.com/JaeSeoKim/badge42)
+    <a href="https://github.com/JaeSeoKim/badge42"><img src="https://badge42.vercel.app/api/v2/cl2xrmmu4000609mlo05k9qg8/project/2798787" alt="hbanthiy's 42 ft_containers Score" /></a>
     </a>
  </p>
   
