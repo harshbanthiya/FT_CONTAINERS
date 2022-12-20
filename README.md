@@ -62,9 +62,4 @@ Have a bug? If you found a problem or idea that is not addressed yet, [please op
 [Harsh Banthiya](https://github.com/harshbanthiya)
 
 
-## Request Codebase 
-
-This is an ongoing project for a lot of students attending 42. Therefore we have only kept the executable and not the entire codebase, if you have questions regarding implementation and want to request the entire codebase. [Please write to me.](mailto:banthiyaharsh01@gmail.com?subject=[GitHub]%20Request%20Codebase%20Minishell%20Or%20Implementation)
-
-
 :metal:
