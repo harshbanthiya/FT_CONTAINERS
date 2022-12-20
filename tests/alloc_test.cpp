@@ -59,15 +59,15 @@ void rebind_test() {
 }
 
 int main() {
-  //rebind_test();
+  rebind_test();
   std::allocator<int> myAlloc;
   int *arr = myAlloc.allocate(14);
   myAlloc.construct(arr, 424242);
   my_destroy(*arr);
   std::cout << *arr << "\n";
   allocTest(myAlloc, &arr);
-  std::vector<int> a(42, 10, myAlloc);
-  std::cout << sizeof(a);
+  //std::vector<int> a(42, 10, myAlloc);
+  //std::cout << sizeof(a);
   myAlloc.deallocate(arr, 1);
   std::cout << "\n";
 
@@ -97,5 +97,5 @@ int main() {
      //std::cout << *tmp << ",";
    //}
    //myAlloc.deallocate(val, 1);
-  system("leaks alloc.out");
+  system("leaks mine.out");
 }

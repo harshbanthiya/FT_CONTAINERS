@@ -19,7 +19,7 @@ CXXFLAGS = --std=c++98 -g
 else ifdef TEST
 CXXFLAGS = -g --std=c++98  #-fsanitize=address
 else
-CXXFLAGS	= --std=c++98
+CXXFLAGS	= --std=c++98 -Wall -Wextra -Werror
 endif
 
 ifdef	TEST
@@ -40,7 +40,7 @@ SRCS			= $(addprefix $(SRCS_DIR), rb_tree.cpp )
 ifdef TEST
 SRCS += $(addprefix $(TEST_DIR), $(TEST).cpp)
 else
-SRCS += $(addprefix $(SRCS_DIR), vector_test.cpp)
+SRCS += $(addprefix $(SRCS_DIR), main.cpp)
 endif
 
 OBJS			= ${SRCS:%.cpp=%.o}

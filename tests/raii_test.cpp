@@ -15,7 +15,7 @@ class thrw {
   thrw() : x(NULL), size(424242), a(std::allocator<int>()) {
     std::cout << "thrw constructor\n";
     // leaks here !
-    // allocate_memory();
+    //allocate_memory();
   }
   void allocate_memory() {
     std::cout << "allocate_memory\n";
@@ -60,5 +60,5 @@ int main() {
   } catch (std::exception &e) {
     std::cout << e.what() << " in Main raii_child_test CATCH\n";
   }
-  system("leaks raii.out | grep leaked");
+  system("leaks mine.out | grep leaked");
 }

@@ -45,7 +45,7 @@ void stl_method_test() {
     std::cout << "\n";
     iterator it_erased = a.erase(a.end() - 4, a.end() - 1);
     std::cout << "*it_erased : " << *it_erased
-              << "\n";  // end()의 위치이면, sanitize=address 걸면 터짐!
+              << "\n";  //If it is the position of end(), sanitize=address will explode!
     std::cout << "distance(a.begin(), it_erased): "
               << std::distance(a.begin(), it_erased) << "\n";
     itb = a.begin();

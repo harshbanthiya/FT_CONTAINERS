@@ -64,7 +64,7 @@ void set_test(int argc, char **argv) {
 }
 
 int main(int argc, char **argv) {
-  max_size_test();
+  //max_size_test();
   set_test(argc, argv);
   std::cout << std::numeric_limits<ptrdiff_t>().max() << "\n";
   std::cout << std::numeric_limits<size_t>().max() << "\n";
@@ -75,5 +75,5 @@ int main(int argc, char **argv) {
   std::cout << sizeof(std::__compressed_pair<int, double>) << "\n";
   std::cout << sizeof(ft::pair<int, double>) << "\n";
   std::cout << sizeof(std::pair<int, double>) << "\n";
-  system("leaks set.out");
+  system("leaks mine.out");
 }
