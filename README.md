@@ -44,13 +44,13 @@ make TEST_tree_test (tests/tree_test.cpp)
 
 ## Additionally also implemented 
 
-• iterators_traits
-• reverse_iterator
-• enable_if (Yes, it is C++11 but you will be able to implement it in a C++98 manner; SFINAE)
-• is_integral
-• equal and/or lexicographical_compare
-• std::pair
-• std::make_pair
+• *iterators_traits*
+• *reverse_iterator*
+• *enable_if* (C++11 feature implemented in a C++98 manner; SFINAE)
+• *is_integral*
+• *equal and/or lexicographical_compare*
+• *std::pair*
+• *std::make_pair*
 
 ## Bug Issues 
 
