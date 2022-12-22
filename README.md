@@ -19,7 +19,6 @@
 - [Usage](#Usage)
 - [Bug Issues](#bug-issues)
 - [Creators](#creators)
-- [Request Codebase or explanations](#request-codebase)
 
 
 ## Usage
