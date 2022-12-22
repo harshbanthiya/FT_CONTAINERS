@@ -160,7 +160,7 @@ void erase_test() {
 
   {
     std::cout
-        << "std vector alloc_ed class test\n";  // ????????? vector 가 터지네?
+        << "std vector alloc_ed class test\n";
     std::vector<int> a;
     a.push_back(421);
     a.push_back(422);
